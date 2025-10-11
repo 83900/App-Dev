@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderLog 旅行手帐应用 - 项目演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            margin: 20px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide:nth-child(1) { animation-delay: 0.1s; }
+        .slide:nth-child(2) { animation-delay: 0.2s; }
+        .slide:nth-child(3) { animation-delay: 0.3s; }
+        .slide:nth-child(4) { animation-delay: 0.4s; }
+        .slide:nth-child(5) { animation-delay: 0.5s; }
+        .slide:nth-child(6) { animation-delay: 0.6s; }
+        .slide:nth-child(7) { animation-delay: 0.7s; }
+        .slide:nth-child(8) { animation-delay: 0.8s; }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+            padding-left: 20px;
+        }
+
+        h3 {
+            color: #2980b9;
+            font-size: 1.4em;
+            margin: 20px 0 15px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .tech-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #3498db, #2980b9);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 25px 0;
+            padding-left: 80px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 22px;
+            top: 5px;
+            width: 17px;
+            height: 17px;
+            background: #3498db;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #3498db;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .layer {
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            position: relative;
+        }
+
+        .layer-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .database-schema {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .table-card {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table-fields {
+            padding: 15px;
+        }
+
+        .field {
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .field:last-child {
+            border-bottom: none;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 25px;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 2s ease-in-out;
+        }
+
+        .login-flow {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: white;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .flow-step:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .map-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .map-feature {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .map-feature:hover {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #3498db;
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #3498db;
+            display: block;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+                margin: 10px 0;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-flow {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- 封面页 -->
+        <div class="slide">
+            <h1>🌟 WanderLog 旅行手帐应用</h1>
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 1.5em; color: #2c3e50; margin-bottom: 20px;">
+                    一个使用Kotlin开发的Android旅行手帐应用
+                </div>
+                <div style="font-size: 1.2em; color: #7f8c8d;">
+                    帮助用户记录和管理旅行经历的完整解决方案
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">12</span>
+                    <div class="stat-label">开发周数</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">6+</span>
+                    <div class="stat-label">核心功能</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">5</span>
+                    <div class="stat-label">开发阶段</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <div class="stat-label">Kotlin开发</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目概述 -->
+        <div class="slide">
+            <h2>📋 项目概述</h2>
+            <div class="highlight">
+                <h3>🎯 项目愿景</h3>
+                <p>WanderLog是一款专为旅行爱好者设计的手帐应用，提供从旅行规划到回忆分享的完整旅行记录解决方案。通过现代化的Android技术栈，为用户打造流畅、美观、功能丰富的旅行记录体验。</p>
+            </div>
+            
+            <h3>👥 目标用户</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🧳</span>
+                    <h4>旅行爱好者</h4>
+                    <p>热爱旅行的年轻人群（18-35岁），需要完整的旅行记录工具</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📝</span>
+                    <h4>记录达人</h4>
+                    <p>喜欢记录和分享生活经历，注重旅行回忆保存的用户</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📊</span>
+                    <h4>规划专家</h4>
+                    <p>需要旅行规划和预算管理工具，追求高效旅行的用户</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心功能 -->
+        <div class="slide">
+            <h2>🚀 核心功能展示</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🗺️</span>
+                    <h4>旅行规划</h4>
+                    <p>创建旅行计划，添加目的地和行程安排，支持时间线管理和预算设置</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>智能行程规划</li>
+                        <li>预算管理系统</li>
+                        <li>目的地推荐</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📝</span>
+                    <h4>旅行日记</h4>
+                    <p>记录旅行见闻，支持富文本编辑，心情记录和评分系统</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>富文本编辑器</li>
+                        <li>心情和评分</li>
+                        <li>天气记录</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📸</span>
+                    <h4>照片管理</h4>
+                    <p>上传和管理旅行照片，支持位置标记和智能分类</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>自动位置标记</li>
+                        <li>照片编辑功能</li>
+                        <li>智能相册分类</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">💰</span>
+                    <h4>费用统计</h4>
+                    <p>记录旅行支出，生成详细的费用报告和预算分析</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>多币种支持</li>
+                        <li>分类统计</li>
+                        <li>预算对比分析</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📍</span>
+                    <h4>地图集成</h4>
+                    <p>显示旅行路线和地点标记，支持离线地图和导航功能</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>实时定位</li>
+                        <li>路线规划</li>
+                        <li>景点推荐</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📤</span>
+                    <h4>分享导出</h4>
+                    <p>生成精美旅行卡片，支持多种分享方式和格式导出</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>精美模板</li>
+                        <li>PDF导出</li>
+                        <li>社交分享</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户登录功能 -->
+        <div class="slide">
+            <h2>🔐 用户登录与认证系统</h2>
+            <div class="highlight">
+                <h3>🛡️ 安全认证方案</h3>
+                <p>采用多层次的用户认证和数据保护机制，确保用户数据安全和隐私保护。</p>
+            </div>
+
+            <h3>登录流程设计</h3>
+            <div class="login-flow">
+                <div class="flow-step">
+                    <div>
+                        📱<br>
+                        启动应用
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div>
+                        🔍<br>
+                        检查登录状态
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div>
+                        🔑<br>
+                        身份验证
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div>
+                        ✅<br>
+                        进入主界面
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📧</span>
+                    <h4>邮箱注册登录</h4>
+                    <p>支持邮箱注册和登录，包含邮箱验证和密码重置功能</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h4>手机号登录</h4>
+                    <p>支持手机号快速注册登录，短信验证码验证</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">👆</span>
+                    <h4>生物识别</h4>
+                    <p>支持指纹和面部识别快速登录，提升用户体验</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h4>数据加密</h4>
+                    <p>用户数据本地加密存储，采用AES加密算法保护隐私</p>
+                </div>
+            </div>
+
+            <h3>🔧 技术实现</h3>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>认证框架：</strong>Firebase Authentication
+                </div>
+                <div class="tech-item">
+                    <strong>本地存储：</strong>Android Keystore + SharedPreferences
+                </div>
+                <div class="tech-item">
+                    <strong>生物识别：</strong>BiometricPrompt API
+                </div>
+                <div class="tech-item">
+                    <strong>数据加密：</strong>AES-256 + RSA
+                </div>
+            </div>
+        </div>
+
+        <!-- 地图集成功能 -->
+        <div class="slide">
+            <h2>🗺️ 地图集成与位置服务</h2>
+            <div class="highlight">
+                <h3>🌍 智能地图系统</h3>
+                <p>集成高德地图SDK，提供精准的位置服务、路线规划和景点推荐功能，为用户打造完整的地理信息体验。</p>
+            </div>
+
+            <h3>地图核心功能</h3>
+            <div class="map-features">
+                <div class="map-feature">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📍</div>
+                    <h4>实时定位</h4>
+                    <p>GPS + 网络定位，精确获取用户当前位置</p>
+                </div>
+                <div class="map-feature">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🛣️</div>
+                    <h4>路线规划</h4>
+                    <p>智能规划最优旅行路线，支持多种交通方式</p>
+                </div>
+                <div class="map-feature">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🏛️</div>
+                    <h4>景点标记</h4>
+                    <p>自动标记旅行地点，支持自定义标记和分类</p>
+                </div>
+                <div class="map-feature">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🔍</div>
+                    <h4>地点搜索</h4>
+                    <p>强大的POI搜索功能，快速找到目标地点</p>
+                </div>
+                <div class="map-feature">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📱</div>
+                    <h4>离线地图</h4>
+                    <p>支持离线地图下载，无网络环境下正常使用</p>
+                </div>
+                <div class="map-feature">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🎯</div>
+                    <h4>智能推荐</h4>
+                    <p>基于位置的景点和餐厅推荐系统</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术架构</h3>
+            <div class="architecture-diagram">
+                <div class="layer">
+                    <div class="layer-title">🎨 UI层 - 地图展示</div>
+                    <p>MapView + 自定义Marker + 交互控件</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-title">🔧 业务层 - 位置服务</div>
+                    <p>LocationManager + GeocodeService + RouteService</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-title">📡 数据层 - 地图SDK</div>
+                    <p>高德地图SDK + GPS服务 + 网络定位</p>
+                </div>
+            </div>
+
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>地图SDK：</strong>高德地图 Android SDK v9.0+
+                </div>
+                <div class="tech-item">
+                    <strong>定位服务：</strong>高德定位SDK + Android Location API
+                </div>
+                <div class="tech-item">
+                    <strong>地理编码：</strong>Geocoding API + 逆地理编码
+                </div>
+                <div class="tech-item">
+                    <strong>路线规划：</strong>Route Planning API + 多种出行方式
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术架构 -->
+        <div class="slide">
+            <h2>🏗️ 技术架构设计</h2>
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; margin-bottom: 30px;">MVVM + Repository 架构模式</h3>
+                
+                <div class="layer">
+                    <div class="layer-title">🎨 Presentation Layer (表现层)</div>
+                    <p><strong>Jetpack Compose + 传统View</strong></p>
+                    <p>Activities, Fragments, ViewModels, UI Components</p>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-title">🔧 Domain Layer (领域层)</div>
+                    <p><strong>业务逻辑处理</strong></p>
+                    <p>Use Cases, Business Entities, Repository Interfaces</p>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-title">📊 Data Layer (数据层)</div>
+                    <p><strong>数据管理</strong></p>
+                    <p>Repository Implementation, Local Database, Remote API</p>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-title">🗄️ Storage Layer (存储层)</div>
+                    <p><strong>Room + SQLite + SharedPreferences</strong></p>
+                    <p>Local Database, File Storage, Configuration Storage</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 核心技术栈</h3>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>开发语言：</strong>Kotlin 1.9.10+
+                </div>
+                <div class="tech-item">
+                    <strong>UI框架：</strong>Jetpack Compose + 传统View
+                </div>
+                <div class="tech-item">
+                    <strong>架构模式：</strong>MVVM + Repository Pattern
+                </div>
+                <div class="tech-item">
+                    <strong>数据库：</strong>Room + SQLite
+                </div>
+                <div class="tech-item">
+                    <strong>网络请求：</strong>Retrofit + OkHttp
+                </div>
+                <div class="tech-item">
+                    <strong>依赖注入：</strong>Hilt (Dagger)
+                </div>
+                <div class="tech-item">
+                    <strong>异步处理：</strong>Coroutines + Flow
+                </div>
+                <div class="tech-item">
+                    <strong>图片加载：</strong>Glide
+                </div>
+                <div class="tech-item">
+                    <strong>导航框架：</strong>Navigation Component
+                </div>
+                <div class="tech-item">
+                    <strong>地图服务：</strong>高德地图SDK
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据库设计 -->
+        <div class="slide">
+            <h2>🗄️ 数据库设计</h2>
+            <div class="database-schema">
+                <div class="table-card">
+                    <div class="table-header">🧳 trips (旅行表)</div>
+                    <div class="table-fields">
+                        <div class="field">id: INTEGER PRIMARY KEY</div>
+                        <div class="field">title: TEXT NOT NULL</div>
+                        <div class="field">description: TEXT</div>
+                        <div class="field">start_date: INTEGER</div>
+                        <div class="field">end_date: INTEGER</div>
+                        <div class="field">budget: REAL</div>
+                        <div class="field">actual_cost: REAL</div>
+                        <div class="field">cover_image: TEXT</div>
+                        <div class="field">created_at: INTEGER</div>
+                        <div class="field">updated_at: INTEGER</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">📝 diary_entries (日记表)</div>
+                    <div class="table-fields">
+                        <div class="field">id: INTEGER PRIMARY KEY</div>
+                        <div class="field">trip_id: INTEGER FK</div>
+                        <div class="field">title: TEXT NOT NULL</div>
+                        <div class="field">content: TEXT</div>
+                        <div class="field">location_name: TEXT</div>
+                        <div class="field">latitude: REAL</div>
+                        <div class="field">longitude: REAL</div>
+                        <div class="field">weather: TEXT</div>
+                        <div class="field">mood: INTEGER</div>
+                        <div class="field">rating: INTEGER</div>
+                        <div class="field">entry_date: INTEGER</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">📸 media_files (媒体表)</div>
+                    <div class="table-fields">
+                        <div class="field">id: INTEGER PRIMARY KEY</div>
+                        <div class="field">diary_entry_id: INTEGER FK</div>
+                        <div class="field">trip_id: INTEGER FK</div>
+                        <div class="field">file_path: TEXT NOT NULL</div>
+                        <div class="field">file_type: TEXT</div>
+                        <div class="field">file_size: INTEGER</div>
+                        <div class="field">caption: TEXT</div>
+                        <div class="field">created_at: INTEGER</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">💰 expenses (费用表)</div>
+                    <div class="table-fields">
+                        <div class="field">id: INTEGER PRIMARY KEY</div>
+                        <div class="field">trip_id: INTEGER FK</div>
+                        <div class="field">category: TEXT NOT NULL</div>
+                        <div class="field">amount: REAL NOT NULL</div>
+                        <div class="field">currency: TEXT</div>
+                        <div class="field">description: TEXT</div>
+                        <div class="field">expense_date: INTEGER</div>
+                        <div class="field">created_at: INTEGER</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">📍 places (地点表)</div>
+                    <div class="table-fields">
+                        <div class="field">id: INTEGER PRIMARY KEY</div>
+                        <div class="field">trip_id: INTEGER FK</div>
+                        <div class="field">name: TEXT NOT NULL</div>
+                        <div class="field">address: TEXT</div>
+                        <div class="field">latitude: REAL</div>
+                        <div class="field">longitude: REAL</div>
+                        <div class="field">category: TEXT</div>
+                        <div class="field">visit_date: INTEGER</div>
+                        <div class="field">notes: TEXT</div>
+                        <div class="field">rating: INTEGER</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header">👤 users (用户表)</div>
+                    <div class="table-fields">
+                        <div class="field">id: INTEGER PRIMARY KEY</div>
+                        <div class="field">username: TEXT UNIQUE</div>
+                        <div class="field">email: TEXT UNIQUE</div>
+                        <div class="field">phone: TEXT</div>
+                        <div class="field">avatar_url: TEXT</div>
+                        <div class="field">created_at: INTEGER</div>
+                        <div class="field">last_login: INTEGER</div>
+                        <div class="field">is_active: BOOLEAN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 开发计划 -->
+        <div class="slide">
+            <h2>📅 开发计划与里程碑</h2>
+            <div class="highlight">
+                <h3>⏱️ 总体规划：12周完整开发周期</h3>
+                <p>采用敏捷开发方法，分5个阶段渐进式交付，确保项目质量和进度可控。</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>🎯 第一阶段：项目准备和基础搭建 (第1-2周)</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%;">已完成 100%</div>
+                        </div>
+                        <ul>
+                            <li>✅ 需求分析和用户调研</li>
+                            <li>✅ 系统架构设计</li>
+                            <li>✅ 技术选型和环境搭建</li>
+                            <li>✅ 数据库设计和建模</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>🏗️ 第二阶段：核心功能开发 (第3-6周)</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;">待开始 0%</div>
+                        </div>
+                        <ul>
+                            <li>🔄 旅行管理功能开发</li>
+                            <li>🔄 日记编辑和管理</li>
+                            <li>🔄 照片上传和管理</li>
+                            <li>🔄 费用记录和统计</li>
+                            <li>🔄 用户认证系统</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>🚀 第三阶段：高级功能和优化 (第7-9周)</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;">待开始 0%</div>
+                        </div>
+                        <ul>
+                            <li>🔄 地图集成和位置服务</li>
+                            <li>🔄 分享和导出功能</li>
+                            <li>🔄 个性化设置</li>
+                            <li>🔄 性能优化和内存管理</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>🧪 第四阶段：测试和发布准备 (第10-12周)</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;">待开始 0%</div>
+                        </div>
+                        <ul>
+                            <li>🔄 全面功能测试</li>
+                            <li>🔄 UI/UX优化和适配</li>
+                            <li>🔄 性能测试和调优</li>
+                            <li>🔄 应用打包和发布</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>🎯 关键里程碑</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📋</span>
+                    <h4>MVP版本 (第6周)</h4>
+                    <p>完成核心功能开发，可进行基础的旅行记录操作</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h4>Beta版本 (第9周)</h4>
+                    <p>完成所有功能开发，进入测试和优化阶段</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🚀</span>
+                    <h4>正式版本 (第12周)</h4>
+                    <p>完成测试和优化，准备发布到应用商店</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目总结 -->
+        <div class="slide">
+            <h2>🎉 项目总结与展望</h2>
+            <div class="highlight">
+                <h3>✨ 项目亮点</h3>
+                <p>WanderLog采用现代化的Android开发技术栈，提供完整的旅行记录解决方案，具有良好的用户体验和技术架构。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🏗️</span>
+                    <h4>技术先进性</h4>
+                    <ul>
+                        <li>Kotlin + Jetpack Compose</li>
+                        <li>MVVM架构模式</li>
+                        <li>现代化开发工具链</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h4>用户体验</h4>
+                    <ul>
+                        <li>Material Design 3</li>
+                        <li>流畅的交互动画</li>
+                        <li>直观的操作界面</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🔒</span>
+                    <h4>安全可靠</h4>
+                    <ul>
+                        <li>数据本地加密存储</li>
+                        <li>多重身份认证</li>
+                        <li>隐私保护机制</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📈</span>
+                    <h4>可扩展性</h4>
+                    <ul>
+                        <li>模块化架构设计</li>
+                        <li>插件化功能扩展</li>
+                        <li>云同步预留接口</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>🔮 未来规划</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>短期目标 (3个月内)</h4>
+                        <ul>
+                            <li>完成Android版本开发和发布</li>
+                            <li>用户反馈收集和功能优化</li>
+                            <li>性能监控和稳定性提升</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>中期目标 (6个月内)</h4>
+                        <ul>
+                            <li>iOS版本开发</li>
+                            <li>云同步功能实现</li>
+                            <li>社交分享功能增强</li>
+                            <li>AI智能推荐系统</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>长期目标 (1年内)</h4>
+                        <ul>
+                            <li>Web版本开发</li>
+                            <li>多平台数据同步</li>
+                            <li>商业化功能探索</li>
+                            <li>国际化支持</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px;">
+                <h3 style="color: white; margin-bottom: 20px;">🚀 让我们开始这段精彩的开发之旅！</h3>
+                <p style="font-size: 1.2em;">WanderLog - 记录每一次旅行，珍藏每一份回忆</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加一些交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 进度条动画
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 1000);
+            });
+
+            // 卡片悬停效果
+            const cards = document.querySelectorAll('.feature-card, .tech-item, .stat-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
