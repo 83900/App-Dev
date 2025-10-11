@@ -1,0 +1,341 @@
+WanderLog 旅行手帐应用 - 系统设计文档
+===========================================
+
+系统架构设计
+-----------
+
+1. 整体架构
+   采用MVVM（Model-View-ViewModel）架构模式：
+   
+   View Layer (UI层)
+   ├── Activities/Fragments
+   ├── Compose UI组件
+   └── 自定义View组件
+   
+   ViewModel Layer (视图模型层)
+   ├── 业务逻辑处理
+   ├── 数据绑定
+   └── 状态管理
+   
+   Model Layer (数据层)
+   ├── Repository (数据仓库)
+   ├── Local Database (本地数据库)
+   ├── Remote API (远程接口)
+   └── SharedPreferences (配置存储)
+
+2. 技术栈选择
+   - 开发语言：Kotlin
+   - UI框架：Jetpack Compose + 传统View
+   - 数据库：Room + SQLite
+   - 网络请求：Retrofit + OkHttp
+   - 图片处理：Glide
+   - 依赖注入：Hilt
+   - 异步处理：Coroutines + Flow
+   - 导航：Navigation Component
+
+模块划分
+--------
+
+1. 核心模块 (core)
+   - 基础工具类
+   - 常量定义
+   - 扩展函数
+   - 网络配置
+
+2. 数据模块 (data)
+   - 数据库实体
+   - DAO接口
+   - Repository实现
+   - 网络API接口
+
+3. 领域模块 (domain)
+   - 业务实体
+   - 用例(UseCase)
+   - Repository接口
+
+4. 表现层模块 (presentation)
+   - Activity/Fragment
+   - ViewModel
+   - UI组件
+   - 适配器
+
+5. 功能模块
+   - 旅行规划模块 (trip-planning)
+   - 旅行记录模块 (trip-diary)
+   - 媒体管理模块 (media)
+   - 设置模块 (settings)
+
+数据库设计
+----------
+
+1. 旅行表 (trips)
+   ```sql
+   CREATE TABLE trips (
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
+       title TEXT NOT NULL,
+       description TEXT,
+       start_date INTEGER NOT NULL,
+       end_date INTEGER NOT NULL,
+       budget REAL DEFAULT 0,
+       actual_cost REAL DEFAULT 0,
+       cover_image TEXT,
+       created_at INTEGER NOT NULL,
+       updated_at INTEGER NOT NULL
+   );
+   ```
+
+2. 旅行日记表 (diary_entries)
+   ```sql
+   CREATE TABLE diary_entries (
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
+       trip_id INTEGER NOT NULL,
+       title TEXT NOT NULL,
+       content TEXT,
+       location_name TEXT,
+       latitude REAL,
+       longitude REAL,
+       weather TEXT,
+       mood INTEGER DEFAULT 0,
+       rating INTEGER DEFAULT 0,
+       entry_date INTEGER NOT NULL,
+       created_at INTEGER NOT NULL,
+       updated_at INTEGER NOT NULL,
+       FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+   );
+   ```
+
+3. 媒体文件表 (media_files)
+   ```sql
+   CREATE TABLE media_files (
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
+       diary_entry_id INTEGER,
+       trip_id INTEGER,
+       file_path TEXT NOT NULL,
+       file_type TEXT NOT NULL,
+       file_size INTEGER DEFAULT 0,
+       caption TEXT,
+       created_at INTEGER NOT NULL,
+       FOREIGN KEY (diary_entry_id) REFERENCES diary_entries(id) ON DELETE CASCADE,
+       FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+   );
+   ```
+
+4. 费用记录表 (expenses)
+   ```sql
+   CREATE TABLE expenses (
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
+       trip_id INTEGER NOT NULL,
+       category TEXT NOT NULL,
+       amount REAL NOT NULL,
+       currency TEXT DEFAULT 'CNY',
+       description TEXT,
+       expense_date INTEGER NOT NULL,
+       created_at INTEGER NOT NULL,
+       FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+   );
+   ```
+
+5. 地点表 (places)
+   ```sql
+   CREATE TABLE places (
+       id INTEGER PRIMARY KEY AUTOINCREMENT,
+       trip_id INTEGER NOT NULL,
+       name TEXT NOT NULL,
+       address TEXT,
+       latitude REAL,
+       longitude REAL,
+       category TEXT,
+       visit_date INTEGER,
+       notes TEXT,
+       rating INTEGER DEFAULT 0,
+       created_at INTEGER NOT NULL,
+       FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+   );
+   ```
+
+API设计
+-------
+
+1. 本地API接口
+   ```kotlin
+   interface TripDao {
+       @Query("SELECT * FROM trips ORDER BY start_date DESC")
+       fun getAllTrips(): Flow<List<Trip>>
+       
+       @Insert
+       suspend fun insertTrip(trip: Trip): Long
+       
+       @Update
+       suspend fun updateTrip(trip: Trip)
+       
+       @Delete
+       suspend fun deleteTrip(trip: Trip)
+   }
+   ```
+
+2. Repository接口
+   ```kotlin
+   interface TripRepository {
+       fun getAllTrips(): Flow<List<Trip>>
+       suspend fun getTripById(id: Long): Trip?
+       suspend fun insertTrip(trip: Trip): Long
+       suspend fun updateTrip(trip: Trip)
+       suspend fun deleteTrip(trip: Trip)
+   }
+   ```
+
+3. 外部API接口（可选）
+   - 天气API：获取历史和实时天气数据
+   - 地图API：地理编码和反地理编码
+   - 云存储API：数据备份和同步
+
+UI/UX设计规范
+------------
+
+1. 设计原则
+   - Material Design 3规范
+   - 简洁直观的界面
+   - 一致的交互体验
+   - 无障碍访问支持
+
+2. 颜色方案
+   - 主色调：蓝色系（代表旅行和探索）
+   - 辅助色：橙色系（代表活力和冒险）
+   - 中性色：灰色系（用于文本和背景）
+   - 状态色：绿色（成功）、红色（错误）、黄色（警告）
+
+3. 字体规范
+   - 标题：24sp, Bold
+   - 副标题：20sp, Medium
+   - 正文：16sp, Regular
+   - 说明文字：14sp, Regular
+   - 小字：12sp, Regular
+
+4. 间距规范
+   - 页面边距：16dp
+   - 组件间距：8dp, 16dp, 24dp
+   - 内容间距：4dp, 8dp
+
+5. 组件规范
+   - 按钮：圆角8dp，最小高度48dp
+   - 卡片：圆角12dp，阴影2dp
+   - 输入框：圆角8dp，边框1dp
+
+页面结构设计
+-----------
+
+1. 主页面
+   - 底部导航栏（首页、旅行、日记、我的）
+   - 顶部工具栏
+   - 内容区域
+
+2. 旅行列表页
+   - 搜索栏
+   - 筛选按钮
+   - 旅行卡片列表
+   - 添加按钮（FAB）
+
+3. 旅行详情页
+   - 封面图片
+   - 基本信息
+   - 标签页（概览、日记、照片、费用）
+
+4. 日记编辑页
+   - 标题输入
+   - 内容编辑器
+   - 媒体添加
+   - 位置选择
+   - 保存按钮
+
+数据流设计
+----------
+
+1. 数据流向
+   UI → ViewModel → UseCase → Repository → DataSource
+
+2. 状态管理
+   - 使用StateFlow管理UI状态
+   - 使用LiveData观察数据变化
+   - 错误状态统一处理
+
+3. 缓存策略
+   - 内存缓存：图片和常用数据
+   - 磁盘缓存：离线数据和媒体文件
+   - 数据库缓存：结构化数据
+
+安全设计
+--------
+
+1. 数据加密
+   - 敏感数据本地加密存储
+   - 数据库文件加密
+   - 网络传输HTTPS
+
+2. 权限管理
+   - 最小权限原则
+   - 运行时权限请求
+   - 权限使用说明
+
+3. 隐私保护
+   - 用户数据本地存储
+   - 可选的数据分享
+   - 数据删除功能
+
+性能优化设计
+-----------
+
+1. 内存优化
+   - 图片压缩和缓存
+   - 对象池复用
+   - 内存泄漏检测
+
+2. 存储优化
+   - 数据分页加载
+   - 懒加载策略
+   - 定期清理缓存
+
+3. 网络优化
+   - 请求缓存
+   - 图片懒加载
+   - 网络状态检测
+
+4. UI优化
+   - RecyclerView优化
+   - 布局层级优化
+   - 动画性能优化
+
+测试策略
+--------
+
+1. 单元测试
+   - Repository测试
+   - ViewModel测试
+   - UseCase测试
+
+2. 集成测试
+   - 数据库测试
+   - API测试
+   - 端到端测试
+
+3. UI测试
+   - Espresso测试
+   - 截图测试
+   - 性能测试
+
+部署和发布
+----------
+
+1. 构建配置
+   - Debug/Release构建变体
+   - 代码混淆配置
+   - 签名配置
+
+2. 版本管理
+   - 语义化版本号
+   - 版本更新策略
+   - 兼容性处理
+
+3. 发布流程
+   - 内测版本
+   - 公测版本
+   - 正式发布
