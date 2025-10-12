@@ -63,6 +63,7 @@ fun MapScreen(
         
         // 顶部搜索栏
         Card(
+            onClick = { navController.navigate("location_search") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -96,7 +97,7 @@ fun MapScreen(
         
         // 右下角定位按钮
         FloatingActionButton(
-            onClick = { /* TODO: 定位到当前位置 */ },
+            onClick = { navController.navigate("location_detail") },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
@@ -112,6 +113,7 @@ fun MapScreen(
         
         // 底部位置信息卡片
         Card(
+            onClick = { navController.navigate("location_detail") },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()

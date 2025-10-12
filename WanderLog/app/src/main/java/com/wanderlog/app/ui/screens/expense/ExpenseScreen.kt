@@ -49,7 +49,7 @@ fun ExpenseScreen(
             },
             actions = {
                 IconButton(
-                    onClick = { /* TODO: 添加新费用 */ }
+                    onClick = { navController.navigate("expense_create") }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -178,7 +178,7 @@ fun ExpenseScreen(
                         else -> Icons.Default.AttachMoney
                     },
                     date = "1月${16 + index}日",
-                    onClick = { /* TODO: 打开费用详情 */ }
+                    onClick = { navController.navigate("expense_detail/${index}") }
                 )
             }
             

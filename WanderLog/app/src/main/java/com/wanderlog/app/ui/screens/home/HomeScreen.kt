@@ -70,7 +70,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        onClick = { /* TODO: 新建旅行 */ },
+                        onClick = { navController.navigate("trip_create") },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
@@ -127,6 +127,12 @@ fun HomeScreen(
             
             // 示例旅行卡片
             items(3) { index ->
+                val tripId = when(index) {
+                    0 -> "trip_1"
+                    1 -> "trip_2"
+                    else -> "trip_3"
+                }
+                
                 TravelCard(
                     title = when(index) {
                         0 -> "日本东京之旅"
@@ -143,7 +149,7 @@ fun HomeScreen(
                         1 -> "2023年12月10日 - 12月17日"
                         else -> "2023年11月5日 - 11月12日"
                     },
-                    onClick = { /* TODO: 打开旅行详情 */ }
+                    onClick = { navController.navigate("trip_detail/$tripId") }
                 )
             }
             

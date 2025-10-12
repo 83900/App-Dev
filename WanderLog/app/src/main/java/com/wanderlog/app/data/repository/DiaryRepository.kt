@@ -6,6 +6,8 @@ import com.google.gson.reflect.TypeToken
 import com.wanderlog.app.data.model.TravelDiary
 import com.wanderlog.app.data.model.DiaryFilter
 import com.wanderlog.app.data.model.DiarySortBy
+import com.wanderlog.app.data.model.DiaryMood
+import com.wanderlog.app.data.model.WeatherType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,6 +27,31 @@ class DiaryRepository @Inject constructor(
     suspend fun getAllDiaries(): List<TravelDiary> = withContext(Dispatchers.IO) {
         try {
             if (!diariesFile.exists()) {
+                // 如果文件不存在，初始化示例数据
+                initializeSampleData()
+                return@withContext getAllDiariesFromFile()
+            }
+            
+            val json = diariesFile.readText()
+            if (json.isBlank()) {
+                // 如果文件为空，初始化示例数据
+                initializeSampleData()
+                return@withContext getAllDiariesFromFile()
+            }
+            
+            val type = object : TypeToken<List<TravelDiary>>() {}.type
+            gson.fromJson(json, type) ?: emptyList()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // 如果加载失败，初始化示例数据
+            initializeSampleData()
+            getAllDiariesFromFile()
+        }
+    }
+    
+    private suspend fun getAllDiariesFromFile(): List<TravelDiary> = withContext(Dispatchers.IO) {
+        try {
+            if (!diariesFile.exists()) {
                 return@withContext emptyList()
             }
             
@@ -41,9 +68,110 @@ class DiaryRepository @Inject constructor(
         }
     }
     
+    private fun initializeSampleData() {
+        val sampleDiaries = listOf(
+            TravelDiary(
+                id = "diary_1",
+                userId = "test_user_id", // 使用测试用户ID
+                tripId = "trip_1",
+                title = "初到东京的第一印象",
+                content = "今天终于到达了东京！从成田机场出来的那一刻，就被这座城市的现代化程度震撼了。地铁系统非常发达，虽然有些复杂，但是非常准时。晚上在新宿逛了逛，霓虹灯闪烁，人来人往，真的是不夜城的感觉。明天计划去浅草寺和东京塔。",
+                location = "新宿, 东京",
+                tags = listOf("初印象", "新宿", "地铁"),
+                weather = WeatherType.CLOUDY.displayName,
+                mood = DiaryMood.EXCITED.displayName,
+                createdAt = System.currentTimeMillis() - (29L * 24 * 60 * 60 * 1000), // 29天前
+                updatedAt = System.currentTimeMillis() - (29L * 24 * 60 * 60 * 1000),
+                isPublic = true
+            ),
+            TravelDiary(
+                id = "diary_2",
+                userId = "test_user_id", // 使用测试用户ID
+                tripId = "trip_1",
+                title = "浅草寺的宁静时光",
+                content = "今天去了浅草寺，虽然游客很多，但是在寺庙里还是能感受到一种宁静氛围。抽了一个签，是大吉！在仲见世通买了一些纪念品，品尝了传统的人形烧和雷门煎饼。傍晚时分，夕阳西下，整个寺庙都被染成了金黄色，非常美丽。",
+                location = "浅草寺, 东京",
+                tags = listOf("寺庙", "传统", "美食"),
+                weather = WeatherType.SUNNY.displayName,
+                mood = DiaryMood.PEACEFUL.displayName,
+                createdAt = System.currentTimeMillis() - (28L * 24 * 60 * 60 * 1000), // 28天前
+                updatedAt = System.currentTimeMillis() - (28L * 24 * 60 * 60 * 1000),
+                isPublic = true
+            ),
+            TravelDiary(
+                id = "diary_3",
+                userId = "test_user_id", // 使用测试用户ID
+                tripId = "trip_2",
+                title = "塞纳河畔的浪漫黄昏",
+                content = "今天沿着塞纳河散步，从圣母院一直走到埃菲尔铁塔。河水波光粼粼，两岸的建筑在夕阳下显得格外美丽。在一家小咖啡馆坐下，点了一杯咖啡和一块马卡龙，看着来往的行人，感受着巴黎独有的浪漫氛围。晚上埃菲尔铁塔亮灯的那一刻，真的太震撼了！",
+                location = "塞纳河, 巴黎",
+                tags = listOf("塞纳河", "埃菲尔铁塔", "浪漫"),
+                weather = WeatherType.SUNNY.displayName,
+                mood = DiaryMood.ROMANTIC.displayName,
+                createdAt = System.currentTimeMillis() - (58L * 24 * 60 * 60 * 1000), // 58天前
+                updatedAt = System.currentTimeMillis() - (58L * 24 * 60 * 60 * 1000),
+                isPublic = true
+            ),
+            TravelDiary(
+                id = "diary_4",
+                userId = "test_user_id", // 使用测试用户ID
+                tripId = "trip_2",
+                title = "卢浮宫的艺术盛宴",
+                content = "今天花了一整天在卢浮宫。蒙娜丽莎的微笑确实很神秘，虽然画作比想象中要小一些。维纳斯雕像的优美线条让人叹为观止。在古埃及文物展区看到了很多珍贵的文物，感受了古代文明的魅力。艺术真的是无国界的语言。",
+                location = "卢浮宫, 巴黎",
+                tags = listOf("艺术", "博物馆", "文化"),
+                weather = WeatherType.RAINY.displayName,
+                mood = DiaryMood.INSPIRED.displayName,
+                createdAt = System.currentTimeMillis() - (57L * 24 * 60 * 60 * 1000), // 57天前
+                updatedAt = System.currentTimeMillis() - (57L * 24 * 60 * 60 * 1000),
+                isPublic = true
+            ),
+            TravelDiary(
+                id = "diary_5",
+                userId = "test_user_id", // 使用测试用户ID
+                tripId = "trip_3",
+                title = "普吉岛的阳光海滩",
+                content = "终于到了梦寐以求的普吉岛！海水清澈见底，沙滩细腻洁白。今天在巴东海滩晒了一整天的太阳，还尝试了冲浪，虽然摔了好几次，但是很有趣。晚上在海边的餐厅吃了新鲜的海鲜，配上泰式酸辣汤，味道绝了！",
+                location = "巴东海滩, 普吉岛",
+                tags = listOf("海滩", "冲浪", "海鲜"),
+                weather = WeatherType.SUNNY.displayName,
+                mood = DiaryMood.RELAXED.displayName,
+                createdAt = System.currentTimeMillis() - (88L * 24 * 60 * 60 * 1000), // 88天前
+                updatedAt = System.currentTimeMillis() - (88L * 24 * 60 * 60 * 1000),
+                isPublic = true
+            ),
+            TravelDiary(
+                id = "diary_6",
+                userId = "test_user_id", // 使用测试用户ID
+                tripId = "trip_3",
+                title = "泰式按摩的极致享受",
+                content = "今天体验了正宗的泰式按摩，真的是太舒服了！按摩师的手法非常专业，把这几天旅行的疲劳都按走了。下午去了当地的市场，买了一些泰式香料和手工艺品。晚上参加了海滩派对，和来自世界各地的朋友一起跳舞，感受了泰国人民的热情。",
+                location = "普吉岛市区",
+                tags = listOf("按摩", "市场", "派对"),
+                weather = WeatherType.SUNNY.displayName,
+                mood = DiaryMood.HAPPY.displayName,
+                createdAt = System.currentTimeMillis() - (85L * 24 * 60 * 60 * 1000), // 85天前
+                updatedAt = System.currentTimeMillis() - (85L * 24 * 60 * 60 * 1000),
+                isPublic = true
+            )
+        )
+        
+        try {
+            val json = gson.toJson(sampleDiaries)
+            diariesFile.writeText(json)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     // 根据用户ID获取日记
     suspend fun getDiariesByUserId(userId: String): List<TravelDiary> = withContext(Dispatchers.IO) {
         getAllDiaries().filter { it.userId == userId }
+    }
+    
+    // 根据旅行ID获取日记
+    suspend fun getDiariesByTrip(userId: String, tripId: String): List<TravelDiary> = withContext(Dispatchers.IO) {
+        getAllDiaries().filter { it.userId == userId && it.tripId == tripId }
     }
     
     // 根据ID获取单个日记

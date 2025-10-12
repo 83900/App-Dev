@@ -59,7 +59,7 @@ class AuthViewModel @Inject constructor(
         }
     }
     
-    fun register(username: String, password: String) {
+    fun register(username: String, displayName: String, password: String) {
         if (username.isBlank() || password.isBlank()) {
             _authState.value = AuthState.Error("用户名和密码不能为空")
             return
@@ -86,6 +86,7 @@ class AuthViewModel @Inject constructor(
                 
                 val newUser = User(
                     username = username,
+                    displayName = displayName,
                     password = password,
                     createdAt = System.currentTimeMillis()
                 )

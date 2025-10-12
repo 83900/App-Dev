@@ -7,6 +7,7 @@ import java.util.UUID
 data class TravelDiary(
     val id: String = UUID.randomUUID().toString(),
     val userId: String,
+    val tripId: String = "", // 关联的旅行ID
     val title: String,
     val content: String,
     val location: String = "",
@@ -46,7 +47,10 @@ enum class DiaryMood(val displayName: String, val emoji: String) {
     NOSTALGIC("怀念", "🥺"),
     TIRED("疲惫", "😴"),
     AMAZED("惊叹", "😍"),
-    GRATEFUL("感恩", "🙏")
+    GRATEFUL("感恩", "🙏"),
+    ROMANTIC("浪漫", "💕"),
+    INSPIRED("受启发", "✨"),
+    RELAXED("放松", "😎")
 }
 
 // 天气状态枚举

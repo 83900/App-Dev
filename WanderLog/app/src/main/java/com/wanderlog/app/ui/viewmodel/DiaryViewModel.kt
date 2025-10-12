@@ -105,6 +105,50 @@ class DiaryViewModel @Inject constructor(
         }
     }
     
+    // 加载特定旅行的日记
+    fun loadDiariesByTrip(userId: String, tripId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+            
+            try {
+                val diariesList = diaryRepository.getDiariesByTrip(userId, tripId)
+                _diaries.value = diariesList
+            } catch (e: Exception) {
+                _error.value = "加载旅行日记失败：${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+    
+    // 搜索特定旅行的日记
+    fun searchDiariesByTrip(userId: String, tripId: String, query: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+            
+            try {
+                val allDiaries = diaryRepository.getDiariesByTrip(userId, tripId)
+                val filteredDiaries = if (query.isBlank()) {
+                    allDiaries
+                } else {
+                    allDiaries.filter { diary ->
+                        diary.title.contains(query, ignoreCase = true) ||
+                        diary.content.contains(query, ignoreCase = true) ||
+                        diary.location.contains(query, ignoreCase = true) ||
+                        diary.tags.any { it.contains(query, ignoreCase = true) }
+                    }
+                }
+                _diaries.value = filteredDiaries
+            } catch (e: Exception) {
+                _error.value = "搜索旅行日记失败：${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
     // 创建新日记
     fun createDiary(
         userId: String,
@@ -118,6 +162,7 @@ class DiaryViewModel @Inject constructor(
         weather: String = "",
         mood: String = "",
         isPublic: Boolean = false,
+        tripId: String? = null,
         onSuccess: (TravelDiary) -> Unit = {},
         onError: (String) -> Unit = {}
     ) {
@@ -148,6 +193,7 @@ class DiaryViewModel @Inject constructor(
                     weather = weather.trim(),
                     mood = mood.trim(),
                     isPublic = isPublic,
+                    tripId = tripId ?: "",
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis()
                 )

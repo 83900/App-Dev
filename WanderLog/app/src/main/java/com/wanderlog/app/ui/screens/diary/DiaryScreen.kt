@@ -41,6 +41,8 @@ fun DiaryScreen(
     val isLoading by diaryViewModel.isLoading.collectAsState()
     val error by diaryViewModel.error.collectAsState()
     
+    var searchQuery by remember { mutableStateOf("") }
+    
     // 监听认证状态变化
     LaunchedEffect(authState) {
         val currentAuthState = authState
@@ -105,6 +107,48 @@ fun DiaryScreen(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.White
             )
+        )
+        
+        // 搜索栏
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { query ->
+                searchQuery = query
+                val currentAuthState = authState
+                if (currentAuthState is AuthState.Authenticated) {
+                    diaryViewModel.searchDiaries(currentAuthState.user.id, query)
+                }
+            },
+            label = { Text("搜索日记") },
+            placeholder = { Text("搜索标题、内容、地点或标签...") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "搜索"
+                )
+            },
+            trailingIcon = {
+                if (searchQuery.isNotEmpty()) {
+                    IconButton(
+                        onClick = {
+                            searchQuery = ""
+                            val currentAuthState = authState
+                            if (currentAuthState is AuthState.Authenticated) {
+                                diaryViewModel.loadDiaries(currentAuthState.user.id)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "清除搜索"
+                        )
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            singleLine = true
         )
         
         // 加载状态

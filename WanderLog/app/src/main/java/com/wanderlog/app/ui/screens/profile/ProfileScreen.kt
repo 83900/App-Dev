@@ -15,16 +15,21 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import android.widget.Toast
+import com.wanderlog.app.data.model.AuthState
+import com.wanderlog.app.ui.viewmodel.AuthViewModel
 import com.wanderlog.app.ui.theme.Primary
 import com.wanderlog.app.ui.theme.Secondary
 import com.wanderlog.app.ui.theme.Surface
@@ -33,8 +38,12 @@ import com.wanderlog.app.ui.theme.Error
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
+    val authState by authViewModel.authState.collectAsState()
+    val context = LocalContext.current
+    
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -72,11 +81,18 @@ fun ProfileScreen(
                             modifier = Modifier.size(60.dp)
                         )
                     }
+
                     
                     Spacer(modifier = Modifier.height(16.dp))
                     
+                    val currentAuthState = authState
+                    val currentUser = when (currentAuthState) {
+                        is AuthState.Authenticated -> currentAuthState.user
+                        else -> null
+                    }
+                    
                     Text(
-                        text = "旅行者",
+                        text = currentUser?.displayName ?: "旅行者",
                         color = Color.White,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
@@ -85,7 +101,7 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     
                     Text(
-                        text = "wanderer@example.com",
+                        text = "@${currentUser?.username ?: "wanderer"}",
                         color = Color.White.copy(alpha = 0.8f),
                         fontSize = 14.sp
                     )
@@ -133,7 +149,9 @@ fun ProfileScreen(
                         icon = Icons.Default.Settings,
                         title = "设置",
                         subtitle = "应用设置和偏好",
-                        onClick = { /* TODO: 打开设置 */ }
+                        onClick = { 
+                            Toast.makeText(context, "设置功能即将推出", Toast.LENGTH_SHORT).show()
+                        }
                     )
                     
                     Divider(color = Color.Gray.copy(alpha = 0.2f))
@@ -142,7 +160,9 @@ fun ProfileScreen(
                         icon = Icons.Default.Notifications,
                         title = "通知",
                         subtitle = "推送通知设置",
-                        onClick = { /* TODO: 打开通知设置 */ }
+                        onClick = { 
+                            Toast.makeText(context, "通知设置功能即将推出", Toast.LENGTH_SHORT).show()
+                        }
                     )
                     
                     Divider(color = Color.Gray.copy(alpha = 0.2f))
@@ -151,7 +171,9 @@ fun ProfileScreen(
                         icon = Icons.Default.Security,
                         title = "隐私与安全",
                         subtitle = "账户安全设置",
-                        onClick = { /* TODO: 打开隐私设置 */ }
+                        onClick = { 
+                            Toast.makeText(context, "隐私与安全功能即将推出", Toast.LENGTH_SHORT).show()
+                        }
                     )
                     
                     Divider(color = Color.Gray.copy(alpha = 0.2f))
@@ -160,7 +182,9 @@ fun ProfileScreen(
                         icon = Icons.Default.Favorite,
                         title = "我的收藏",
                         subtitle = "收藏的地点和日记",
-                        onClick = { /* TODO: 打开收藏 */ }
+                        onClick = { 
+                            Toast.makeText(context, "收藏功能即将推出", Toast.LENGTH_SHORT).show()
+                        }
                     )
                 }
             }
@@ -182,7 +206,9 @@ fun ProfileScreen(
                         icon = Icons.Default.Help,
                         title = "帮助与支持",
                         subtitle = "常见问题和客服",
-                        onClick = { /* TODO: 打开帮助 */ }
+                        onClick = { 
+                            Toast.makeText(context, "帮助与支持功能即将推出", Toast.LENGTH_SHORT).show()
+                        }
                     )
                     
                     Divider(color = Color.Gray.copy(alpha = 0.2f))
@@ -191,7 +217,12 @@ fun ProfileScreen(
                         icon = Icons.Default.Logout,
                         title = "退出登录",
                         subtitle = "安全退出当前账户",
-                        onClick = { /* TODO: 退出登录 */ },
+                        onClick = { 
+                            authViewModel.logout()
+                            navController.navigate("login") {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        },
                         textColor = Error
                     )
                 }

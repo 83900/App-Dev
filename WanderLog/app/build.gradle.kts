@@ -91,6 +91,7 @@ dependencies {
     
     // Image Loading
     implementation(libs.glide.compose)
+    implementation(libs.coil.compose)
     
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)

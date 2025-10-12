@@ -23,6 +23,7 @@ fun RegisterScreen(
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     var username by remember { mutableStateOf("") }
+    var displayName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
@@ -69,9 +70,28 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             supportingText = {
-                Text("用户名长度需要3-20个字符")
+                Text("用户名长度需要3-20个字符，用于登录")
             },
             isError = username.isNotBlank() && username.length < 3,
+            enabled = authState !is AuthState.Loading
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // 显示名称输入
+        OutlinedTextField(
+            value = displayName,
+            onValueChange = { 
+                displayName = it
+                viewModel.clearError()
+            },
+            label = { Text("显示名称") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            supportingText = {
+                Text("其他用户看到的名称，可以使用中文")
+            },
+            isError = displayName.isNotBlank() && displayName.length < 2,
             enabled = authState !is AuthState.Loading
         )
         
@@ -145,7 +165,7 @@ fun RegisterScreen(
         // 注册按钮
         Button(
             onClick = {
-                viewModel.register(username, password)
+                viewModel.register(username, displayName.ifBlank { username }, password)
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = username.length >= 3 && 

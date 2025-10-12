@@ -17,6 +17,26 @@ class UserRepository @Inject constructor(
     private val currentUserFile = File(context.filesDir, "current_user.json")
     private val gson = Gson()
     
+    init {
+        // 初始化内置测试账户
+        initializeBuiltInAccount()
+    }
+    
+    private fun initializeBuiltInAccount() {
+        val users = getAllUsers()
+        val testAccountExists = users.any { it.username == "test" }
+        
+        if (!testAccountExists) {
+            val testUser = User(
+                id = "test_user_id", // 使用固定的ID
+                username = "test",
+                displayName = "测试用户",
+                password = "root"
+            )
+            saveUser(testUser)
+        }
+    }
+    
     // 获取所有用户
     fun getAllUsers(): List<User> {
         return try {
@@ -36,7 +56,13 @@ class UserRepository @Inject constructor(
     fun saveUser(user: User): Boolean {
         return try {
             val users = getAllUsers().toMutableList()
-            users.add(user)
+            // 检查是否已存在相同用户名的用户，如果存在则更新，否则添加
+            val existingIndex = users.indexOfFirst { it.username == user.username }
+            if (existingIndex >= 0) {
+                users[existingIndex] = user
+            } else {
+                users.add(user)
+            }
             val json = gson.toJson(users)
             usersFile.writeText(json)
             true

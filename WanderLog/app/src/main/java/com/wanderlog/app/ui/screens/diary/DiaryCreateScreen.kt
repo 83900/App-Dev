@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import com.wanderlog.app.data.model.AuthState
 import com.wanderlog.app.data.model.DiaryMood
 import com.wanderlog.app.data.model.WeatherType
+import com.wanderlog.app.ui.components.PhotoPicker
 import com.wanderlog.app.ui.viewmodel.AuthViewModel
 import com.wanderlog.app.ui.viewmodel.DiaryViewModel
 
@@ -24,6 +25,7 @@ import com.wanderlog.app.ui.viewmodel.DiaryViewModel
 @Composable
 fun DiaryCreateScreen(
     navController: NavController,
+    tripId: String? = null,
     authViewModel: AuthViewModel = hiltViewModel(),
     diaryViewModel: DiaryViewModel = hiltViewModel()
 ) {
@@ -37,7 +39,9 @@ fun DiaryCreateScreen(
     var selectedWeather by remember { mutableStateOf<WeatherType?>(null) }
     var tags by remember { mutableStateOf("") }
     var isPublic by remember { mutableStateOf(false) }
+    var photos by remember { mutableStateOf<List<String>>(emptyList()) }
     
+    // 对话框状态
     var showMoodDialog by remember { mutableStateOf(false) }
     var showWeatherDialog by remember { mutableStateOf(false) }
     
@@ -83,10 +87,12 @@ fun DiaryCreateScreen(
                             title = title,
                             content = content,
                             location = location,
+                            photos = photos,
                             tags = tagList,
                             weather = selectedWeather?.emoji ?: "",
                             mood = selectedMood?.emoji ?: "",
                             isPublic = isPublic,
+                            tripId = tripId,
                             onSuccess = { 
                                 navController.popBackStack()
                             },
@@ -226,6 +232,13 @@ fun DiaryCreateScreen(
                     }
                 }
             }
+            
+            // 照片选择
+            PhotoPicker(
+                photos = photos,
+                onPhotosChanged = { photos = it },
+                modifier = Modifier.fillMaxWidth()
+            )
             
             // 标签输入
             OutlinedTextField(
