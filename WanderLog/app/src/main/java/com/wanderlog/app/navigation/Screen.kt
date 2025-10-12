@@ -26,11 +26,21 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
     object DiaryCreate : Screen("diary_create", "创建日记", Icons.Default.Add)
     object DiaryCreateWithTrip : Screen("diary_create/{tripId}", "创建日记", Icons.Default.Add)
     
+    // 账单相关路由
+    object TripExpense : Screen("trip_expense/{tripId}", "旅行账单", Icons.Default.Receipt)
+    object AddExpense : Screen("add_expense/{tripId}", "添加账单", Icons.Default.Add)
+    object EditExpense : Screen("edit_expense/{expenseId}", "编辑账单", Icons.Default.Edit)
+    object ConvertBudget : Screen("convert_budget/{expenseId}", "预算转账单", Icons.Default.SwapHoriz)
+    
     fun createTripDetailRoute(tripId: String) = "trip_detail/$tripId"
     fun createTripEditRoute(tripId: String) = "trip_edit/$tripId"
     fun createDiaryDetailRoute(diaryId: String) = "diary_detail/$diaryId"
     fun createDiaryEditRoute(diaryId: String) = "diary_edit/$diaryId"
     fun createDiaryWithTripRoute(tripId: String) = "diary_create/$tripId"
+    fun createTripExpenseRoute(tripId: String) = "trip_expense/$tripId"
+    fun createAddExpenseRoute(tripId: String) = "add_expense/$tripId"
+    fun createEditExpenseRoute(expenseId: String) = "edit_expense/$expenseId"
+    fun createConvertBudgetRoute(expenseId: String) = "convert_budget/$expenseId"
 }
 
 val bottomNavItems = listOf(

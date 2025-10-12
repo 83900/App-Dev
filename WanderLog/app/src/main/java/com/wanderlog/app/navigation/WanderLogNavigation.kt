@@ -17,6 +17,10 @@ import com.wanderlog.app.ui.screens.diary.DiaryDetailScreen
 import com.wanderlog.app.ui.screens.diary.DiaryEditScreen
 import com.wanderlog.app.ui.screens.map.MapScreen
 import com.wanderlog.app.ui.screens.expense.ExpenseScreen
+import com.wanderlog.app.ui.screens.expense.TripExpenseScreen
+import com.wanderlog.app.ui.screens.expense.AddExpenseScreen
+import com.wanderlog.app.ui.screens.expense.EditExpenseScreen
+import com.wanderlog.app.ui.screens.expense.ConvertBudgetScreen
 import com.wanderlog.app.ui.screens.profile.ProfileScreen
 import com.wanderlog.app.ui.screens.auth.LoginScreen
 import com.wanderlog.app.ui.screens.auth.RegisterScreen
@@ -152,6 +156,39 @@ fun WanderLogNavigation(
             val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
             DiaryEditScreen(
                 diaryId = diaryId,
+                navController = navController
+            )
+        }
+        
+        // 账单相关路由
+        composable(Screen.TripExpense.route) { backStackEntry ->
+            val tripId = backStackEntry.arguments?.getString("tripId") ?: ""
+            TripExpenseScreen(
+                tripId = tripId,
+                navController = navController
+            )
+        }
+        
+        composable(Screen.AddExpense.route) { backStackEntry ->
+            val tripId = backStackEntry.arguments?.getString("tripId") ?: ""
+            AddExpenseScreen(
+                tripId = tripId,
+                navController = navController
+            )
+        }
+        
+        composable(Screen.EditExpense.route) { backStackEntry ->
+            val expenseId = backStackEntry.arguments?.getString("expenseId") ?: ""
+            EditExpenseScreen(
+                expenseId = expenseId,
+                navController = navController
+            )
+        }
+        
+        composable(Screen.ConvertBudget.route) { backStackEntry ->
+            val expenseId = backStackEntry.arguments?.getString("expenseId") ?: ""
+            ConvertBudgetScreen(
+                expenseId = expenseId,
                 navController = navController
             )
         }
