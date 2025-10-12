@@ -8,9 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.wanderlog.app.ui.screens.home.HomeScreen
 import com.wanderlog.app.ui.screens.diary.DiaryScreen
+import com.wanderlog.app.ui.screens.diary.DiaryCreateScreen
+import com.wanderlog.app.ui.screens.diary.DiaryDetailScreen
+import com.wanderlog.app.ui.screens.diary.DiaryEditScreen
 import com.wanderlog.app.ui.screens.map.MapScreen
 import com.wanderlog.app.ui.screens.expense.ExpenseScreen
 import com.wanderlog.app.ui.screens.profile.ProfileScreen
+import com.wanderlog.app.ui.screens.auth.LoginScreen
+import com.wanderlog.app.ui.screens.auth.RegisterScreen
 
 @Composable
 fun WanderLogNavigation(
@@ -40,6 +45,54 @@ fun WanderLogNavigation(
         
         composable(Screen.Profile.route) {
             ProfileScreen(navController = navController)
+        }
+        
+        // 认证相关路由
+        composable(Screen.Login.route) {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate(Screen.Register.route)
+                }
+            )
+        }
+        
+        composable(Screen.Register.route) {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        
+        // 日记相关路由
+        composable(Screen.DiaryCreate.route) {
+            DiaryCreateScreen(navController = navController)
+        }
+        
+        composable(Screen.DiaryDetail.route) { backStackEntry ->
+            val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
+            DiaryDetailScreen(
+                diaryId = diaryId,
+                navController = navController
+            )
+        }
+        
+        composable(Screen.DiaryEdit.route) { backStackEntry ->
+            val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
+            DiaryEditScreen(
+                diaryId = diaryId,
+                navController = navController
+            )
         }
     }
 }

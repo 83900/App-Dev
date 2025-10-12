@@ -7,6 +7,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -17,12 +18,14 @@ import com.wanderlog.app.ui.theme.OnSurfaceVariant
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController
+    navController: NavController,
+    modifier: Modifier = Modifier
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
+        modifier = modifier,
         containerColor = Color.White,
         contentColor = Primary
     ) {
@@ -37,17 +40,17 @@ fun BottomNavigationBar(
                 label = {
                     Text(text = screen.title)
                 },
-                selected = currentRoute == screen.route,
+                selected = currentDestination?.route == screen.route,
                 onClick = {
-                    if (currentRoute != screen.route) {
-                        navController.navigate(screen.route) {
-                            // 避免重复导航到同一个页面
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+                    navController.navigate(screen.route) {
+                        // 清除回退栈到起始目的地
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = false
                         }
+                        // 避免重复创建相同目的地
+                        launchSingleTop = true
+                        // 恢复状态
+                        restoreState = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(

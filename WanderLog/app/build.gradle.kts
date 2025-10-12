@@ -86,6 +86,9 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.gson)
     
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+    
     // Image Loading
     implementation(libs.glide.compose)
     
