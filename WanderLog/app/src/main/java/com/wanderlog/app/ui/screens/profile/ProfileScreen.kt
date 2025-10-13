@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import android.widget.Toast
 import com.wanderlog.app.data.model.AuthState
 import com.wanderlog.app.ui.viewmodel.AuthViewModel
+import com.wanderlog.app.ui.viewmodel.ProfileViewModel
 import com.wanderlog.app.ui.theme.Primary
 import com.wanderlog.app.ui.theme.Secondary
 import com.wanderlog.app.ui.theme.Surface
@@ -40,10 +41,23 @@ import com.wanderlog.app.ui.theme.Error
 fun ProfileScreen(
     navController: NavController,
     onLogout: () -> Unit = {},
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     val authState by authViewModel.authState.collectAsState()
+    val profileStats by profileViewModel.profileStats.collectAsState()
     val context = LocalContext.current
+    
+    // 当用户认证状态改变时，加载用户统计数据
+    LaunchedEffect(authState) {
+        val currentAuthState = authState
+        if (currentAuthState is AuthState.Authenticated) {
+            // 为test用户初始化示例数据
+            profileViewModel.initializeSampleDataForTestUser(currentAuthState.user.id)
+            // 加载用户统计数据
+            profileViewModel.loadUserStats(currentAuthState.user.id)
+        }
+    }
     
     LazyColumn(
         modifier = Modifier
@@ -116,17 +130,17 @@ fun ProfileScreen(
                     ) {
                         StatItem(
                             title = "旅行次数",
-                            value = "12",
+                            value = if (profileStats.isLoading) "..." else "${profileStats.tripCount}",
                             textColor = Color.White
                         )
                         StatItem(
                             title = "访问城市",
-                            value = "28",
+                            value = if (profileStats.isLoading) "..." else "${profileStats.visitedCities}",
                             textColor = Color.White
                         )
                         StatItem(
                             title = "日记数量",
-                            value = "156",
+                            value = if (profileStats.isLoading) "..." else "${profileStats.diaryCount}",
                             textColor = Color.White
                         )
                     }
