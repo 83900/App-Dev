@@ -23,6 +23,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wanderlog.app.data.model.AuthState
 import com.wanderlog.app.data.model.Trip
 import com.wanderlog.app.data.model.TripStatus
+import com.wanderlog.app.ui.components.ModernCard
+import com.wanderlog.app.ui.theme.Primary
+import com.wanderlog.app.ui.theme.Secondary
+import com.wanderlog.app.ui.theme.AccentOrange
 import com.wanderlog.app.ui.viewmodel.AuthViewModel
 import com.wanderlog.app.ui.viewmodel.TripViewModel
 import java.text.SimpleDateFormat
@@ -54,6 +58,7 @@ fun TripScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF8FAFC))
             .padding(16.dp)
     ) {
         // 标题和搜索栏
@@ -70,7 +75,9 @@ fun TripScreen(
             
             FloatingActionButton(
                 onClick = onNavigateToCreateTrip,
-                modifier = Modifier.size(56.dp)
+                modifier = Modifier.size(56.dp),
+                containerColor = Primary,
+                contentColor = Color.White
             ) {
                 Icon(Icons.Default.Add, contentDescription = "添加旅行")
             }
@@ -162,17 +169,16 @@ private fun TripCard(
 ) {
     val dateFormat = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
     val statusColor = when (trip.status) {
-        TripStatus.PLANNED -> MaterialTheme.colorScheme.primary
-        TripStatus.ONGOING -> MaterialTheme.colorScheme.secondary
-        TripStatus.COMPLETED -> MaterialTheme.colorScheme.tertiary
+        TripStatus.PLANNED -> Primary
+        TripStatus.ONGOING -> Secondary
+        TripStatus.COMPLETED -> AccentOrange
         TripStatus.CANCELLED -> MaterialTheme.colorScheme.error
     }
     
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ModernCard(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick,
+        elevation = 6
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

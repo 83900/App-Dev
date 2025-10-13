@@ -5,4 +5,5 @@ sealed class AuthState {
     object Unauthenticated : AuthState()
     data class Authenticated(val user: User) : AuthState()
     data class Error(val message: String) : AuthState()
+    object RegistrationSuccess : AuthState()
 }

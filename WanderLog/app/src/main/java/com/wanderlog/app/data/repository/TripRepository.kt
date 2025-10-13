@@ -160,25 +160,32 @@ class TripRepository @Inject constructor(
                     val trips = json.decodeFromString<List<Trip>>(jsonString)
                     _trips.value = trips
                 } else {
-                    // 如果文件为空，初始化示例数据
-                    initializeSampleData()
+                    // 如果文件为空，初始化为空列表
+                    _trips.value = emptyList()
                 }
             } else {
-                // 如果文件不存在，初始化示例数据
-                initializeSampleData()
+                // 如果文件不存在，初始化为空列表
+                _trips.value = emptyList()
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            // 如果加载失败，初始化示例数据
-            initializeSampleData()
+            // 如果加载失败，初始化为空列表
+            _trips.value = emptyList()
         }
     }
     
-    private fun initializeSampleData() {
+    // 为特定用户初始化示例数据
+    suspend fun initializeSampleDataForUser(userId: String) {
+        // 检查该用户是否已有旅行数据
+        val existingTrips = _trips.value.filter { it.userId == userId }
+        if (existingTrips.isNotEmpty()) {
+            return // 如果已有数据，不再初始化
+        }
+        
         val sampleTrips = listOf(
             Trip(
-                id = "trip_1",
-                userId = "test_user_id", // 使用测试用户ID
+                id = "trip_1_$userId",
+                userId = userId,
                 name = "日本东京之旅",
                 description = "探索东京的现代与传统，品尝地道日料，体验日本文化。",
                 destination = "东京, 日本",
@@ -191,8 +198,8 @@ class TripRepository @Inject constructor(
                 isPublic = true
             ),
             Trip(
-                id = "trip_2",
-                userId = "test_user_id", // 使用测试用户ID
+                id = "trip_2_$userId",
+                userId = userId,
                 name = "巴黎浪漫之行",
                 description = "漫步塞纳河畔，参观卢浮宫，在埃菲尔铁塔下许愿。",
                 destination = "巴黎, 法国",
@@ -205,8 +212,8 @@ class TripRepository @Inject constructor(
                 isPublic = true
             ),
             Trip(
-                id = "trip_3",
-                userId = "test_user_id", // 使用测试用户ID
+                id = "trip_3_$userId",
+                userId = userId,
                 name = "泰国海岛度假",
                 description = "在普吉岛享受阳光沙滩，体验泰式按摩和热带风情。",
                 destination = "普吉岛, 泰国",
@@ -220,8 +227,16 @@ class TripRepository @Inject constructor(
             )
         )
         
-        _trips.value = sampleTrips
+        // 将示例数据添加到现有数据中
+        val currentTrips = _trips.value.toMutableList()
+        currentTrips.addAll(sampleTrips)
+        _trips.value = currentTrips
         saveTrips()
+    }
+    
+    private fun initializeSampleData() {
+        // 这个方法现在不再使用，保留以防兼容性问题
+        _trips.value = emptyList()
     }
     
     private fun saveTrips() {

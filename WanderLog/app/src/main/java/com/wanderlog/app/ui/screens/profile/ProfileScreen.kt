@@ -39,6 +39,7 @@ import com.wanderlog.app.ui.theme.Error
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    onLogout: () -> Unit = {},
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val authState by authViewModel.authState.collectAsState()
@@ -218,10 +219,7 @@ fun ProfileScreen(
                         title = "退出登录",
                         subtitle = "安全退出当前账户",
                         onClick = { 
-                            authViewModel.logout()
-                            navController.navigate("login") {
-                                popUpTo(0) { inclusive = true }
-                            }
+                            onLogout()
                         },
                         textColor = Error
                     )

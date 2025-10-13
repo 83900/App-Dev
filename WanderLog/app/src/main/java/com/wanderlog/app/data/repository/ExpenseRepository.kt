@@ -39,8 +39,8 @@ class ExpenseRepository @Inject constructor(
                 val loadedExpenses = gson.fromJson<List<Expense>>(json, type) ?: emptyList()
                 _expenses.value = loadedExpenses
             } else {
-                // 如果文件不存在，为 test 用户初始化示例数据
-                initializeTestUserData()
+                // 如果文件不存在，初始化为空列表
+                _expenses.value = emptyList()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -49,20 +49,23 @@ class ExpenseRepository @Inject constructor(
     }
 
     /**
-     * 为 test 用户初始化示例数据
+     * 为特定用户初始化示例数据
      */
-    private fun initializeTestUserData() {
-        val testUserId = "test_user_id"
-        val testTripIds = listOf("trip_1", "trip_2", "trip_3")
+    suspend fun initializeSampleDataForUser(userId: String) {
+        // 检查该用户是否已有消费记录
+        val existingExpenses = _expenses.value.filter { it.userId == userId }
+        if (existingExpenses.isNotEmpty()) {
+            return // 如果已有数据，不再初始化
+        }
         
         // 创建示例消费记录
         val exampleExpenses = mutableListOf<Expense>()
         
-        // 东京之旅 (trip_1)
+        // 东京之旅 (trip_1_$userId)
         exampleExpenses.addAll(listOf(
             Expense(
-                tripId = "trip_1",
-                userId = testUserId,
+                tripId = "trip_1_$userId",
+                userId = userId,
                 type = ExpenseType.BUDGET,
                 title = "住宿预算",
                 description = "酒店住宿费用预算",
@@ -73,8 +76,8 @@ class ExpenseRepository @Inject constructor(
                 date = System.currentTimeMillis() - 86400000 * 5
             ),
             Expense(
-                tripId = "trip_1",
-                userId = testUserId,
+                tripId = "trip_1_$userId",
+                userId = userId,
                 type = ExpenseType.BILL,
                 title = "机票费用",
                 description = "往返机票",
@@ -83,91 +86,83 @@ class ExpenseRepository @Inject constructor(
                 date = System.currentTimeMillis() - 86400000 * 7
             ),
             Expense(
-                tripId = "trip_1",
-                userId = testUserId,
+                tripId = "trip_1_$userId",
+                userId = userId,
                 type = ExpenseType.BUDGET,
                 title = "餐饮预算",
                 description = "每日餐饮费用",
                 amount = 1500.0,
+                actualAmount = 1200.0,
                 category = "餐饮",
+                isCompleted = true,
                 date = System.currentTimeMillis() - 86400000 * 3
             )
         ))
         
-        // 巴黎之旅 (trip_2)
+        // 巴黎之旅 (trip_2_$userId)
         exampleExpenses.addAll(listOf(
             Expense(
-                tripId = "trip_2",
-                userId = testUserId,
-                type = ExpenseType.BUDGET,
-                title = "购物预算",
-                description = "纪念品和购物",
-                amount = 2000.0,
-                actualAmount = 2500.0,
-                category = "购物",
-                isCompleted = true,
-                date = System.currentTimeMillis() - 86400000 * 10
-            ),
-            Expense(
-                tripId = "trip_2",
-                userId = testUserId,
+                tripId = "trip_2_$userId",
+                userId = userId,
                 type = ExpenseType.BILL,
                 title = "卢浮宫门票",
                 description = "博物馆门票",
-                amount = 150.0,
-                category = "娱乐",
-                date = System.currentTimeMillis() - 86400000 * 12
-            ),
-            Expense(
-                tripId = "trip_2",
-                userId = testUserId,
-                type = ExpenseType.BUDGET,
-                title = "交通预算",
-                description = "地铁和出租车费用",
-                amount = 800.0,
-                category = "交通",
-                date = System.currentTimeMillis() - 86400000 * 8
-            )
-        ))
-        
-        // 泰国之旅 (trip_3)
-        exampleExpenses.addAll(listOf(
-            Expense(
-                tripId = "trip_3",
-                userId = testUserId,
-                type = ExpenseType.BILL,
-                title = "SPA按摩",
-                description = "泰式按摩和SPA",
-                amount = 300.0,
+                amount = 120.0,
                 category = "娱乐",
                 date = System.currentTimeMillis() - 86400000 * 15
             ),
             Expense(
-                tripId = "trip_3",
-                userId = testUserId,
+                tripId = "trip_2_$userId",
+                userId = userId,
                 type = ExpenseType.BUDGET,
-                title = "海鲜大餐预算",
-                description = "海边餐厅用餐",
-                amount = 500.0,
-                actualAmount = 450.0,
-                category = "餐饮",
+                title = "购物预算",
+                description = "纪念品和购物",
+                amount = 2000.0,
+                actualAmount = 1800.0,
+                category = "购物",
                 isCompleted = true,
-                date = System.currentTimeMillis() - 86400000 * 18
-            ),
-            Expense(
-                tripId = "trip_3",
-                userId = testUserId,
-                type = ExpenseType.BUDGET,
-                title = "水上活动预算",
-                description = "潜水和水上运动",
-                amount = 1200.0,
-                category = "娱乐",
-                date = System.currentTimeMillis() - 86400000 * 20
+                date = System.currentTimeMillis() - 86400000 * 12
             )
         ))
-
-        _expenses.value = exampleExpenses
+        
+        // 泰国之旅 (trip_3_$userId)
+        exampleExpenses.addAll(listOf(
+            Expense(
+                tripId = "trip_3_$userId",
+                userId = userId,
+                type = ExpenseType.BILL,
+                title = "海滩度假村",
+                description = "度假村住宿费用",
+                amount = 1800.0,
+                category = "住宿",
+                date = System.currentTimeMillis() - 86400000 * 25
+            ),
+            Expense(
+                tripId = "trip_3_$userId",
+                userId = userId,
+                type = ExpenseType.BUDGET,
+                title = "水上活动预算",
+                description = "潜水、冲浪等活动",
+                amount = 800.0,
+                category = "娱乐",
+                isCompleted = false,
+                date = System.currentTimeMillis() - 86400000 * 22
+            )
+        ))
+        
+        // 将示例数据添加到现有数据中
+        val currentExpenses = _expenses.value.toMutableList()
+        currentExpenses.addAll(exampleExpenses)
+        _expenses.value = currentExpenses
         saveExpenses()
+    }
+
+    /**
+     * 为 test 用户初始化示例数据
+     */
+    private fun initializeTestUserData() {
+        // 这个方法现在不再使用，保留以防兼容性问题
+        _expenses.value = emptyList()
     }
 
     /**

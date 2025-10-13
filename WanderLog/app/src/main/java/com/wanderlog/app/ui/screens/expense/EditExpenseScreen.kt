@@ -8,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
@@ -55,8 +55,19 @@ fun EditExpenseScreen(
     
     // 加载账单数据
     LaunchedEffect(expenseId) {
-        // 这里应该从 ViewModel 加载特定的 expense
-        // 暂时使用模拟数据
+        expenseViewModel.loadExpenseById(expenseId)
+    }
+    
+    // 监听选中的账单数据变化
+    LaunchedEffect(uiState.selectedExpense) {
+        uiState.selectedExpense?.let { exp ->
+            expense = exp
+            title = exp.title
+            description = exp.description
+            amount = exp.amount.toString()
+            selectedCategory = exp.category
+            selectedDate = exp.date
+        }
     }
     
     // 处理成功消息
@@ -91,7 +102,7 @@ fun EditExpenseScreen(
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "返回"
                     )
                 }

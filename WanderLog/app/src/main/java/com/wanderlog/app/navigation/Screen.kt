@@ -25,6 +25,7 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
     object DiaryEdit : Screen("diary_edit/{diaryId}", "编辑日记", Icons.Default.Edit)
     object DiaryCreate : Screen("diary_create", "创建日记", Icons.Default.Add)
     object DiaryCreateWithTrip : Screen("diary_create/{tripId}", "创建日记", Icons.Default.Add)
+    object TripSelection : Screen("trip_selection", "选择旅行", Icons.Default.Flight)
     
     // 账单相关路由
     object TripExpense : Screen("trip_expense/{tripId}", "旅行账单", Icons.Default.Receipt)

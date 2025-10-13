@@ -1,5 +1,6 @@
 package com.wanderlog.app.ui.components
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -8,7 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.wanderlog.app.navigation.Screen
@@ -25,7 +29,12 @@ fun BottomNavigationBar(
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
-        modifier = modifier,
+        modifier = modifier
+            .shadow(
+                elevation = 12.dp,
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+            )
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
         containerColor = Color.White,
         contentColor = Primary
     ) {

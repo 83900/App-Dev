@@ -218,6 +218,28 @@ class ExpenseViewModel @Inject constructor(
     fun setShowMode(mode: ShowMode) {
         _uiState.value = _uiState.value.copy(showMode = mode)
     }
+
+    /**
+     * 根据ID加载特定的消费记录
+     */
+    fun loadExpenseById(expenseId: String) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            try {
+                val expense = expenseRepository.getExpenseById(expenseId)
+                _uiState.value = _uiState.value.copy(
+                    selectedExpense = expense,
+                    isLoading = false,
+                    errorMessage = if (expense == null) "账单不存在" else null
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
+            }
+        }
+    }
 }
 
 /**

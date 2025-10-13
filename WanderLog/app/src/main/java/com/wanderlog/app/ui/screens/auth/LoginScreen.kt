@@ -30,8 +30,22 @@ fun LoginScreen(
     
     // 处理登录成功
     LaunchedEffect(authState) {
-        if (authState is AuthState.Authenticated) {
-            onLoginSuccess()
+        android.util.Log.d("LoginScreen", "=== AUTH STATE CHANGED IN LOGIN SCREEN ===")
+        android.util.Log.d("LoginScreen", "New auth state: $authState")
+        android.util.Log.d("LoginScreen", "State type: ${authState::class.simpleName}")
+        
+        val currentState = authState
+        when (currentState) {
+            is AuthState.Authenticated -> {
+                android.util.Log.d("LoginScreen", "=== LOGIN SUCCESS DETECTED ===")
+                android.util.Log.d("LoginScreen", "User: ${currentState.user.username}")
+                android.util.Log.d("LoginScreen", "Calling onLoginSuccess callback")
+                onLoginSuccess()
+                android.util.Log.d("LoginScreen", "onLoginSuccess callback completed")
+            }
+            else -> {
+                android.util.Log.d("LoginScreen", "Auth state is not Authenticated: $currentState")
+            }
         }
     }
     
@@ -108,6 +122,8 @@ fun LoginScreen(
         // 登录按钮
         Button(
             onClick = {
+                android.util.Log.d("LoginScreen", "=== LOGIN BUTTON CLICKED ===")
+                android.util.Log.d("LoginScreen", "Username: '$username', Password: '$password'")
                 viewModel.login(username, password)
             },
             modifier = Modifier.fillMaxWidth(),

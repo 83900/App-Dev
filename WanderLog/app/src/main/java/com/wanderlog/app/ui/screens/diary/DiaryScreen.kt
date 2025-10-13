@@ -94,7 +94,7 @@ fun DiaryScreen(
             actions = {
                 IconButton(
                     onClick = { 
-                        navController.navigate(Screen.DiaryCreate.route)
+                        navController.navigate(Screen.TripSelection.route)
                     }
                 ) {
                     Icon(
@@ -170,7 +170,7 @@ fun DiaryScreen(
                     item {
                         EmptyDiaryState(
                             onCreateDiary = {
-                                navController.navigate(Screen.DiaryCreate.route)
+                                navController.navigate(Screen.TripSelection.route)
                             }
                         )
                     }

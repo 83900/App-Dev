@@ -31,7 +31,8 @@ class UserRepository @Inject constructor(
                 id = "test_user_id", // 使用固定的ID
                 username = "test",
                 displayName = "测试用户",
-                password = "root"
+                password = "root",
+                createdAt = System.currentTimeMillis()
             )
             saveUser(testUser)
         }
@@ -42,12 +43,17 @@ class UserRepository @Inject constructor(
         return try {
             if (usersFile.exists()) {
                 val json = usersFile.readText()
+                android.util.Log.d("UserRepository", "Reading users file: $json")
                 val type = object : TypeToken<List<User>>() {}.type
-                gson.fromJson(json, type) ?: emptyList()
+                val users = gson.fromJson<List<User>>(json, type) ?: emptyList()
+                android.util.Log.d("UserRepository", "Parsed ${users.size} users")
+                users
             } else {
+                android.util.Log.d("UserRepository", "Users file does not exist")
                 emptyList()
             }
         } catch (e: Exception) {
+            android.util.Log.e("UserRepository", "Error reading users file", e)
             emptyList()
         }
     }
@@ -73,44 +79,83 @@ class UserRepository @Inject constructor(
     
     // 验证登录
     fun validateLogin(username: String, password: String): User? {
-        return getAllUsers().find { 
+        val users = getAllUsers()
+        android.util.Log.d("UserRepository", "Validating login for username: '$username', password: '$password'")
+        android.util.Log.d("UserRepository", "Total users: ${users.size}")
+        
+        users.forEach { user ->
+            android.util.Log.d("UserRepository", "User: ${user.username}, password: ${user.password}")
+        }
+        
+        val user = users.find { 
             it.username == username && it.password == password 
         }
+        
+        android.util.Log.d("UserRepository", "Login result: ${if (user != null) "SUCCESS" else "FAILED"}")
+        return user
     }
     
     // 检查用户名是否存在
     fun isUsernameExists(username: String): Boolean {
-        return getAllUsers().any { it.username == username }
+        val users = getAllUsers()
+        val exists = users.any { it.username == username }
+        android.util.Log.d("UserRepository", "Checking username '$username', exists: $exists, total users: ${users.size}")
+        users.forEach { user ->
+            android.util.Log.d("UserRepository", "User: ${user.username}")
+        }
+        return exists
     }
     
     // 保存当前登录用户
-    fun saveCurrentUser(user: User) {
-        try {
+    fun saveCurrentUser(user: User): Boolean {
+        return try {
             val json = gson.toJson(user)
             currentUserFile.writeText(json)
+            android.util.Log.d("UserRepository", "Current user saved: ${user.username}")
+            true
         } catch (e: Exception) {
-            // 处理错误
+            android.util.Log.e("UserRepository", "Error saving current user", e)
+            false
         }
     }
     
-    // 获取当前登录用户
+    // 获取当前用户
     fun getCurrentUser(): User? {
         return try {
             if (currentUserFile.exists()) {
                 val json = currentUserFile.readText()
-                gson.fromJson(json, User::class.java)
+                val user = gson.fromJson(json, User::class.java)
+                android.util.Log.d("UserRepository", "Current user loaded: ${user?.username}")
+                user
             } else {
+                android.util.Log.d("UserRepository", "No current user file found")
                 null
             }
         } catch (e: Exception) {
+            android.util.Log.e("UserRepository", "Error loading current user", e)
             null
         }
     }
     
-    // 登出
-    fun logout() {
-        if (currentUserFile.exists()) {
-            currentUserFile.delete()
+    // 清除当前用户（登出）
+    fun clearCurrentUser(): Boolean {
+        return try {
+            if (currentUserFile.exists()) {
+                val deleted = currentUserFile.delete()
+                android.util.Log.d("UserRepository", "Current user file deleted: $deleted")
+                deleted
+            } else {
+                android.util.Log.d("UserRepository", "No current user file to delete")
+                true
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("UserRepository", "Error clearing current user", e)
+            false
         }
+    }
+    
+    // 保持向后兼容性
+    fun logout() {
+        clearCurrentUser()
     }
 }

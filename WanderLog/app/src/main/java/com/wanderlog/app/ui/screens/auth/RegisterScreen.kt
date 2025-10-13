@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wanderlog.app.data.model.AuthState
 import com.wanderlog.app.ui.viewmodel.AuthViewModel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,14 +28,89 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    var showSuccessMessage by remember { mutableStateOf(false) }
+    var countdown by remember { mutableStateOf(5) }
+    var registrationCompleted by remember { mutableStateOf(false) }
     
     val authState by viewModel.authState.collectAsState()
     
     // 处理注册成功
     LaunchedEffect(authState) {
-        if (authState is AuthState.Authenticated) {
-            onRegisterSuccess()
+        // 当状态为RegistrationSuccess时，显示成功页面
+        if (authState is AuthState.RegistrationSuccess && !showSuccessMessage) {
+            showSuccessMessage = true
+            // 开始倒计时
+            for (i in 5 downTo 1) {
+                countdown = i
+                delay(1000)
+            }
+            // 倒计时结束后跳转到登录页面
+            onNavigateToLogin()
         }
+    }
+    
+    // 如果显示成功消息，显示成功页面
+    if (showSuccessMessage) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "🎉",
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Text(
+                        text = "注册成功！",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Text(
+                        text = "欢迎加入 WanderLog！",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Text(
+                        text = "${countdown}秒后自动跳转到登录页面",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Button(
+                        onClick = onNavigateToLogin,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("立即登录")
+                    }
+                }
+            }
+        }
+        return
     }
     
     Column(
@@ -91,7 +167,6 @@ fun RegisterScreen(
             supportingText = {
                 Text("其他用户看到的名称，可以使用中文")
             },
-            isError = displayName.isNotBlank() && displayName.length < 2,
             enabled = authState !is AuthState.Loading
         )
         
@@ -112,30 +187,6 @@ fun RegisterScreen(
             } else {
                 PasswordVisualTransformation()
             },
-            supportingText = {
-                Text("密码长度至少6个字符")
-            },
-            isError = password.isNotBlank() && password.length < 6,
-            enabled = authState !is AuthState.Loading
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // 确认密码
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = { 
-                confirmPassword = it
-                viewModel.clearError()
-            },
-            label = { Text("确认密码") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            visualTransformation = if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
             trailingIcon = {
                 IconButton(onClick = { showPassword = !showPassword }) {
                     Icon(
@@ -148,6 +199,26 @@ fun RegisterScreen(
                     )
                 }
             },
+            supportingText = {
+                Text("密码长度至少6个字符")
+            },
+            isError = password.isNotBlank() && password.length < 6,
+            enabled = authState !is AuthState.Loading
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // 确认密码输入
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { 
+                confirmPassword = it
+                viewModel.clearError()
+            },
+            label = { Text("确认密码") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
             isError = confirmPassword.isNotBlank() && password != confirmPassword,
             supportingText = {
                 if (confirmPassword.isNotBlank() && password != confirmPassword) {
