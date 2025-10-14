@@ -1,15 +1,13 @@
 package com.wanderlog.app.data.model
 
-import kotlinx.serialization.Serializable
 import java.util.UUID
 
-@Serializable
 data class TravelDiary(
-    val id: String = UUID.randomUUID().toString(),
-    val userId: String,
+    val id: String = "",
+    val userId: String = "",
     val tripId: String = "", // 关联的旅行ID
-    val title: String,
-    val content: String,
+    val title: String = "",
+    val content: String = "",
     val location: String = "",
     val latitude: Double? = null,
     val longitude: Double? = null,
@@ -17,26 +15,74 @@ data class TravelDiary(
     val tags: List<String> = emptyList(),
     val weather: String = "",
     val mood: String = "",
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis(),
+    val createdAt: Long = 0L,
+    val updatedAt: Long = 0L,
     val isPublic: Boolean = false
-)
+) {
+    companion object {
+        fun create(
+            userId: String,
+            tripId: String = "",
+            title: String,
+            content: String,
+            location: String = "",
+            latitude: Double? = null,
+            longitude: Double? = null,
+            photos: List<String> = emptyList(),
+            tags: List<String> = emptyList(),
+            weather: String = "",
+            mood: String = "",
+            isPublic: Boolean = false
+        ): TravelDiary {
+            val currentTime = System.currentTimeMillis()
+            return TravelDiary(
+                id = UUID.randomUUID().toString(),
+                userId = userId,
+                tripId = tripId,
+                title = title,
+                content = content,
+                location = location,
+                latitude = latitude,
+                longitude = longitude,
+                photos = photos,
+                tags = tags,
+                weather = weather,
+                mood = mood,
+                createdAt = currentTime,
+                updatedAt = currentTime,
+                isPublic = isPublic
+            )
+        }
+    }
+}
 
-@Serializable
 data class DiaryLocation(
-    val name: String,
-    val latitude: Double,
-    val longitude: Double,
+    val name: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
     val address: String = ""
 )
 
-@Serializable
 data class DiaryPhoto(
-    val id: String = UUID.randomUUID().toString(),
-    val path: String,
+    val id: String = "",
+    val path: String = "",
     val caption: String = "",
-    val timestamp: Long = System.currentTimeMillis()
-)
+    val timestamp: Long = 0L
+) {
+    companion object {
+        fun create(
+            path: String,
+            caption: String = ""
+        ): DiaryPhoto {
+            return DiaryPhoto(
+                id = UUID.randomUUID().toString(),
+                path = path,
+                caption = caption,
+                timestamp = System.currentTimeMillis()
+            )
+        }
+    }
+}
 
 // 日记状态枚举
 enum class DiaryMood(val displayName: String, val emoji: String) {

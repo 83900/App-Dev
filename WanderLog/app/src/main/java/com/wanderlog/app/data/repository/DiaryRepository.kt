@@ -27,18 +27,22 @@ class DiaryRepository @Inject constructor(
     suspend fun getAllDiaries(): List<TravelDiary> = withContext(Dispatchers.IO) {
         try {
             if (!diariesFile.exists()) {
+                android.util.Log.d("DiaryRepository", "Diaries file does not exist, returning empty list")
                 return@withContext emptyList()
             }
             
             val json = diariesFile.readText()
             if (json.isBlank()) {
+                android.util.Log.d("DiaryRepository", "Diaries file is empty, returning empty list")
                 return@withContext emptyList()
             }
             
             val type = object : TypeToken<List<TravelDiary>>() {}.type
-            gson.fromJson(json, type) ?: emptyList()
+            val diaries = gson.fromJson<List<TravelDiary>>(json, type) ?: emptyList()
+            android.util.Log.d("DiaryRepository", "Successfully loaded ${diaries.size} diaries from file")
+            diaries
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("DiaryRepository", "getAllDiaries failed", e)
             emptyList()
         }
     }
@@ -54,8 +58,7 @@ class DiaryRepository @Inject constructor(
             }
             
             val sampleDiaries = listOf(
-                TravelDiary(
-                    id = "diary_${userId}_1",
+                TravelDiary.create(
                     userId = userId,
                     tripId = "trip_1_$userId",
                     title = "初到东京的第一印象",
@@ -64,12 +67,12 @@ class DiaryRepository @Inject constructor(
                     tags = listOf("初印象", "新宿", "地铁"),
                     weather = WeatherType.CLOUDY.displayName,
                     mood = DiaryMood.EXCITED.displayName,
-                    createdAt = System.currentTimeMillis() - (29L * 24 * 60 * 60 * 1000), // 29天前
-                    updatedAt = System.currentTimeMillis() - (29L * 24 * 60 * 60 * 1000),
                     isPublic = true
+                ).copy(
+                    createdAt = System.currentTimeMillis() - (29L * 24 * 60 * 60 * 1000), // 29天前
+                    updatedAt = System.currentTimeMillis() - (29L * 24 * 60 * 60 * 1000)
                 ),
-                TravelDiary(
-                    id = "diary_${userId}_2",
+                TravelDiary.create(
                     userId = userId,
                     tripId = "trip_1_$userId",
                     title = "浅草寺的宁静时光",
@@ -78,12 +81,12 @@ class DiaryRepository @Inject constructor(
                     tags = listOf("寺庙", "传统", "美食"),
                     weather = WeatherType.SUNNY.displayName,
                     mood = DiaryMood.PEACEFUL.displayName,
-                    createdAt = System.currentTimeMillis() - (28L * 24 * 60 * 60 * 1000), // 28天前
-                    updatedAt = System.currentTimeMillis() - (28L * 24 * 60 * 60 * 1000),
                     isPublic = true
+                ).copy(
+                    createdAt = System.currentTimeMillis() - (28L * 24 * 60 * 60 * 1000), // 28天前
+                    updatedAt = System.currentTimeMillis() - (28L * 24 * 60 * 60 * 1000)
                 ),
-                TravelDiary(
-                    id = "diary_${userId}_3",
+                TravelDiary.create(
                     userId = userId,
                     tripId = "trip_2_$userId",
                     title = "塞纳河畔的浪漫黄昏",
@@ -92,12 +95,12 @@ class DiaryRepository @Inject constructor(
                     tags = listOf("塞纳河", "埃菲尔铁塔", "浪漫"),
                     weather = WeatherType.SUNNY.displayName,
                     mood = DiaryMood.ROMANTIC.displayName,
-                    createdAt = System.currentTimeMillis() - (58L * 24 * 60 * 60 * 1000), // 58天前
-                    updatedAt = System.currentTimeMillis() - (58L * 24 * 60 * 60 * 1000),
                     isPublic = true
+                ).copy(
+                    createdAt = System.currentTimeMillis() - (58L * 24 * 60 * 60 * 1000), // 58天前
+                    updatedAt = System.currentTimeMillis() - (58L * 24 * 60 * 60 * 1000)
                 ),
-                TravelDiary(
-                    id = "diary_${userId}_4",
+                TravelDiary.create(
                     userId = userId,
                     tripId = "trip_2_$userId",
                     title = "卢浮宫的艺术盛宴",
@@ -106,12 +109,12 @@ class DiaryRepository @Inject constructor(
                     tags = listOf("艺术", "博物馆", "文化"),
                     weather = WeatherType.RAINY.displayName,
                     mood = DiaryMood.INSPIRED.displayName,
-                    createdAt = System.currentTimeMillis() - (57L * 24 * 60 * 60 * 1000), // 57天前
-                    updatedAt = System.currentTimeMillis() - (57L * 24 * 60 * 60 * 1000),
                     isPublic = true
+                ).copy(
+                    createdAt = System.currentTimeMillis() - (57L * 24 * 60 * 60 * 1000), // 57天前
+                    updatedAt = System.currentTimeMillis() - (57L * 24 * 60 * 60 * 1000)
                 ),
-                TravelDiary(
-                    id = "diary_${userId}_5",
+                TravelDiary.create(
                     userId = userId,
                     tripId = "trip_3_$userId",
                     title = "普吉岛的阳光海滩",
@@ -120,12 +123,12 @@ class DiaryRepository @Inject constructor(
                     tags = listOf("海滩", "冲浪", "海鲜"),
                     weather = WeatherType.SUNNY.displayName,
                     mood = DiaryMood.RELAXED.displayName,
-                    createdAt = System.currentTimeMillis() - (88L * 24 * 60 * 60 * 1000), // 88天前
-                    updatedAt = System.currentTimeMillis() - (88L * 24 * 60 * 60 * 1000),
                     isPublic = true
+                ).copy(
+                    createdAt = System.currentTimeMillis() - (88L * 24 * 60 * 60 * 1000), // 88天前
+                    updatedAt = System.currentTimeMillis() - (88L * 24 * 60 * 60 * 1000)
                 ),
-                TravelDiary(
-                    id = "diary_${userId}_6",
+                TravelDiary.create(
                     userId = userId,
                     tripId = "trip_3_$userId",
                     title = "泰式按摩的极致享受",
@@ -134,9 +137,10 @@ class DiaryRepository @Inject constructor(
                     tags = listOf("按摩", "市场", "派对"),
                     weather = WeatherType.SUNNY.displayName,
                     mood = DiaryMood.HAPPY.displayName,
-                    createdAt = System.currentTimeMillis() - (85L * 24 * 60 * 60 * 1000), // 85天前
-                    updatedAt = System.currentTimeMillis() - (85L * 24 * 60 * 60 * 1000),
                     isPublic = true
+                ).copy(
+                    createdAt = System.currentTimeMillis() - (85L * 24 * 60 * 60 * 1000), // 85天前
+                    updatedAt = System.currentTimeMillis() - (85L * 24 * 60 * 60 * 1000)
                 )
             )
             
@@ -166,22 +170,42 @@ class DiaryRepository @Inject constructor(
     // 保存日记
     suspend fun saveDiary(diary: TravelDiary): Boolean = withContext(Dispatchers.IO) {
         try {
+            // 验证日记数据
+            if (diary.userId.isBlank()) {
+                android.util.Log.e("DiaryRepository", "saveDiary failed: userId is blank")
+                return@withContext false
+            }
+            
+            if (diary.title.isBlank()) {
+                android.util.Log.e("DiaryRepository", "saveDiary failed: title is blank")
+                return@withContext false
+            }
+            
             val diaries = getAllDiaries().toMutableList()
             val existingIndex = diaries.indexOfFirst { it.id == diary.id }
             
             if (existingIndex >= 0) {
                 // 更新现有日记
                 diaries[existingIndex] = diary.copy(updatedAt = System.currentTimeMillis())
+                android.util.Log.d("DiaryRepository", "Updated existing diary: ${diary.id}")
             } else {
                 // 添加新日记
                 diaries.add(diary)
+                android.util.Log.d("DiaryRepository", "Added new diary: ${diary.id}")
+            }
+            
+            // 确保父目录存在
+            if (!diariesFile.parentFile?.exists()!!) {
+                diariesFile.parentFile?.mkdirs()
             }
             
             val json = gson.toJson(diaries)
             diariesFile.writeText(json)
+            
+            android.util.Log.d("DiaryRepository", "Successfully saved diary to file: ${diariesFile.absolutePath}")
             true
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("DiaryRepository", "saveDiary failed", e)
             false
         }
     }

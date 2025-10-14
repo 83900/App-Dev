@@ -166,12 +166,21 @@ class DiaryViewModel @Inject constructor(
         onSuccess: (TravelDiary) -> Unit = {},
         onError: (String) -> Unit = {}
     ) {
+        // 输入验证
+        if (userId.isBlank()) {
+            android.util.Log.e("DiaryViewModel", "createDiary failed: userId is blank")
+            onError("用户ID不能为空")
+            return
+        }
+        
         if (title.isBlank()) {
+            android.util.Log.e("DiaryViewModel", "createDiary failed: title is blank")
             onError("标题不能为空")
             return
         }
         
         if (content.isBlank()) {
+            android.util.Log.e("DiaryViewModel", "createDiary failed: content is blank")
             onError("内容不能为空")
             return
         }
@@ -181,7 +190,9 @@ class DiaryViewModel @Inject constructor(
             _error.value = null
             
             try {
-                val newDiary = TravelDiary(
+                android.util.Log.d("DiaryViewModel", "Creating diary for user: $userId, title: $title")
+                
+                val newDiary = TravelDiary.create(
                     userId = userId,
                     title = title.trim(),
                     content = content.trim(),
@@ -193,20 +204,23 @@ class DiaryViewModel @Inject constructor(
                     weather = weather.trim(),
                     mood = mood.trim(),
                     isPublic = isPublic,
-                    tripId = tripId ?: "",
-                    createdAt = System.currentTimeMillis(),
-                    updatedAt = System.currentTimeMillis()
+                    tripId = tripId ?: ""
                 )
+                
+                android.util.Log.d("DiaryViewModel", "Created diary object with ID: ${newDiary.id}")
                 
                 val success = diaryRepository.saveDiary(newDiary)
                 if (success) {
+                    android.util.Log.d("DiaryViewModel", "Successfully saved diary: ${newDiary.id}")
                     onSuccess(newDiary)
                     loadDiaries(userId) // 重新加载列表
                 } else {
-                    onError("创建日记失败")
+                    android.util.Log.e("DiaryViewModel", "Failed to save diary: ${newDiary.id}")
+                    onError("创建日记失败，请稍后重试")
                 }
             } catch (e: Exception) {
-                onError("创建日记失败：${e.message}")
+                android.util.Log.e("DiaryViewModel", "createDiary exception", e)
+                onError("创建日记失败：${e.message ?: "未知错误"}")
             } finally {
                 _isLoading.value = false
             }
