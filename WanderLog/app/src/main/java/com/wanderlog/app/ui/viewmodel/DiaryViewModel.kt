@@ -45,27 +45,38 @@ class DiaryViewModel @Inject constructor(
     
     // 加载用户的所有日记
     fun loadDiaries(userId: String) {
+        android.util.Log.d("DiaryViewModel", "loadDiaries called for userId: $userId")
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
             
+            android.util.Log.d("DiaryViewModel", "Starting to load diaries, isLoading set to true")
+            
             try {
+                android.util.Log.d("DiaryViewModel", "Calling diaryRepository.searchDiaries with query: '${_searchQuery.value}', filter: ${_currentFilter.value}, sort: ${_currentSort.value}")
+                
                 val diariesList = diaryRepository.searchDiaries(
                     userId = userId,
                     query = _searchQuery.value,
                     filter = _currentFilter.value,
                     sortBy = _currentSort.value
                 )
+                
+                android.util.Log.d("DiaryViewModel", "Successfully loaded ${diariesList.size} diaries")
                 _diaries.value = diariesList
                 
                 // 同时加载统计信息
+                android.util.Log.d("DiaryViewModel", "Loading diary stats")
                 val stats = diaryRepository.getDiaryStats(userId)
                 _diaryStats.value = stats
+                android.util.Log.d("DiaryViewModel", "Successfully loaded diary stats: $stats")
                 
             } catch (e: Exception) {
+                android.util.Log.e("DiaryViewModel", "Failed to load diaries for user: $userId", e)
                 _error.value = "加载日记失败：${e.message}"
             } finally {
                 _isLoading.value = false
+                android.util.Log.d("DiaryViewModel", "loadDiaries completed, isLoading set to false")
             }
         }
     }

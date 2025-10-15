@@ -49,6 +49,7 @@ fun DiaryEditScreen(
     // 检查用户认证状态
     if (authState !is AuthState.Authenticated) {
         LaunchedEffect(Unit) {
+            android.util.Log.w("DiaryEditScreen", "User not authenticated, navigating back")
             navController.popBackStack()
         }
         return
@@ -56,13 +57,19 @@ fun DiaryEditScreen(
     
     // 加载日记详情
     LaunchedEffect(diaryId) {
-        diaryViewModel.getDiaryById(diaryId)
+        android.util.Log.d("DiaryEditScreen", "Loading diary details for ID: $diaryId")
+        try {
+            diaryViewModel.getDiaryById(diaryId)
+        } catch (e: Exception) {
+            android.util.Log.e("DiaryEditScreen", "Failed to load diary: $diaryId", e)
+        }
     }
     
     // 初始化表单数据
     LaunchedEffect(selectedDiary) {
         selectedDiary?.let { diary ->
             if (!isInitialized) {
+                android.util.Log.d("DiaryEditScreen", "Initializing form data for diary: ${diary.id}")
                 title = diary.title
                 content = diary.content
                 location = diary.location
@@ -74,6 +81,7 @@ fun DiaryEditScreen(
                 selectedWeather = WeatherType.values().find { it.emoji == diary.weather }
                 
                 isInitialized = true
+                android.util.Log.d("DiaryEditScreen", "Form data initialized successfully")
             }
         }
     }
@@ -84,6 +92,7 @@ fun DiaryEditScreen(
     if (currentDiary != null && currentAuthState is AuthState.Authenticated && 
         currentDiary.userId != currentAuthState.user.id) {
         LaunchedEffect(Unit) {
+            android.util.Log.w("DiaryEditScreen", "User ${currentAuthState.user.id} not authorized to edit diary ${currentDiary.id} (owner: ${currentDiary.userId})")
             navController.popBackStack()
         }
         return

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WanderLog 旅行手帐应用 - 项目演示</title>
+    <title>WanderLog Travel Journal App - Project Demo</title>
     <style>
         * {
             margin: 0;
@@ -367,230 +367,230 @@
 </head>
 <body>
     <div class="presentation-container">
-        <!-- 封面页 -->
+        <!-- Cover -->
         <div class="slide">
-            <h1>🌟 WanderLog 旅行手帐应用</h1>
+            <h1>🌟 WanderLog Travel Journal App</h1>
             <div style="text-align: center; margin: 40px 0;">
                 <div style="font-size: 1.5em; color: #2c3e50; margin-bottom: 20px;">
-                    一个使用Kotlin开发的Android旅行手帐应用
+                    An Android travel journal app built with Kotlin
                 </div>
                 <div style="font-size: 1.2em; color: #7f8c8d;">
-                    帮助用户记录和管理旅行经历的完整解决方案
+                    A complete solution to record and manage travel experiences
                 </div>
             </div>
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number">12</span>
-                    <div class="stat-label">开发周数</div>
+                    <div class="stat-label">Development Weeks</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">6+</span>
-                    <div class="stat-label">核心功能</div>
+                    <div class="stat-label">Core Features</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">5</span>
-                    <div class="stat-label">开发阶段</div>
+                    <div class="stat-label">Development Phases</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">100%</span>
-                    <div class="stat-label">Kotlin开发</div>
+                    <div class="stat-label">Kotlin Development</div>
                 </div>
             </div>
         </div>
 
-        <!-- 项目概述 -->
+        <!-- Project Overview -->
         <div class="slide">
-            <h2>📋 项目概述</h2>
+            <h2>📋 Project Overview</h2>
             <div class="highlight">
-                <h3>🎯 项目愿景</h3>
-                <p>WanderLog是一款专为旅行爱好者设计的手帐应用，提供从旅行规划到回忆分享的完整旅行记录解决方案。通过现代化的Android技术栈，为用户打造流畅、美观、功能丰富的旅行记录体验。</p>
+                <h3>🎯 Project Vision</h3>
+                <p>WanderLog is a travel journal app designed for travel enthusiasts, providing a complete solution from trip planning to memory sharing. With a modern Android tech stack, it delivers a smooth, beautiful, and feature-rich travel recording experience.</p>
             </div>
             
-            <h3>👥 目标用户</h3>
+            <h3>👥 Target Users</h3>
             <div class="feature-grid">
                 <div class="feature-card">
                     <span class="feature-icon">🧳</span>
-                    <h4>旅行爱好者</h4>
-                    <p>热爱旅行的年轻人群（18-35岁），需要完整的旅行记录工具</p>
+                    <h4>Travel Enthusiasts</h4>
+                    <p>Young people (18–35) who love traveling and need a complete travel recording tool</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📝</span>
-                    <h4>记录达人</h4>
-                    <p>喜欢记录和分享生活经历，注重旅行回忆保存的用户</p>
+                    <h4>Journal Lovers</h4>
+                    <p>People who enjoy recording and sharing life experiences and care about preserving travel memories</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📊</span>
-                    <h4>规划专家</h4>
-                    <p>需要旅行规划和预算管理工具，追求高效旅行的用户</p>
+                    <h4>Planning Experts</h4>
+                    <p>Users who need trip planning and budget management tools and pursue efficient travel</p>
                 </div>
             </div>
         </div>
 
-        <!-- 技术架构 -->
+        <!-- Technical Architecture -->
         <div class="slide">
-            <h2>🏗️ 技术架构设计</h2>
+            <h2>🏗️ Technical Architecture Design</h2>
             <div class="architecture-diagram">
-                <h3 style="text-align: center; margin-bottom: 30px;">MVVM + Repository 架构模式</h3>
+                <h3 style="text-align: center; margin-bottom: 30px;">MVVM + Repository Architecture Pattern</h3>
                 
                 <div class="layer">
-                    <div class="layer-title">🎨 Presentation Layer (表现层)</div>
-                    <p><strong>Jetpack Compose + 传统View</strong></p>
+                    <div class="layer-title">🎨 Presentation Layer</div>
+                    <p><strong>Jetpack Compose + traditional Views</strong></p>
                     <p>Activities, Fragments, ViewModels, UI Components</p>
                 </div>
                 
                 <div class="layer">
-                    <div class="layer-title">🔧 Domain Layer (领域层)</div>
-                    <p><strong>业务逻辑处理</strong></p>
+                    <div class="layer-title">🔧 Domain Layer</div>
+                    <p><strong>Business logic</strong></p>
                     <p>Use Cases, Business Entities, Repository Interfaces</p>
                 </div>
                 
                 <div class="layer">
-                    <div class="layer-title">📊 Data Layer (数据层)</div>
-                    <p><strong>数据管理</strong></p>
+                    <div class="layer-title">📊 Data Layer</div>
+                    <p><strong>Data management</strong></p>
                     <p>Repository Implementation, Local Database, Remote API</p>
                 </div>
                 
                 <div class="layer">
-                    <div class="layer-title">🗄️ Storage Layer (存储层)</div>
+                    <div class="layer-title">🗄️ Storage Layer</div>
                     <p><strong>Room + SQLite + SharedPreferences</strong></p>
                     <p>Local Database, File Storage, Configuration Storage</p>
                 </div>
             </div>
 
-            <h3>🛠️ 核心技术栈</h3>
+            <h3>🛠️ Core Tech Stack</h3>
             <div class="tech-stack">
                 <div class="tech-item">
-                    <strong>开发语言：</strong>Kotlin 1.9.10+
+                    <strong>Language:</strong> Kotlin 1.9.10+
                 </div>
                 <div class="tech-item">
-                    <strong>UI框架：</strong>Jetpack Compose + 传统View
+                    <strong>UI Framework:</strong> Jetpack Compose + traditional Views
                 </div>
                 <div class="tech-item">
-                    <strong>架构模式：</strong>MVVM + Repository Pattern
+                    <strong>Architecture Pattern:</strong> MVVM + Repository Pattern
                 </div>
                 <div class="tech-item">
-                    <strong>数据库：</strong>Room + SQLite
+                    <strong>Database:</strong> Room + SQLite
                 </div>
                 <div class="tech-item">
-                    <strong>网络请求：</strong>Retrofit + OkHttp
+                    <strong>Networking:</strong> Retrofit + OkHttp
                 </div>
                 <div class="tech-item">
-                    <strong>依赖注入：</strong>Hilt (Dagger)
+                    <strong>Dependency Injection:</strong> Hilt (Dagger)
                 </div>
                 <div class="tech-item">
-                    <strong>异步处理：</strong>Coroutines + Flow
+                    <strong>Async:</strong> Coroutines + Flow
                 </div>
                 <div class="tech-item">
-                    <strong>图片加载：</strong>Glide
+                    <strong>Image Loading:</strong> Glide
                 </div>
                 <div class="tech-item">
-                    <strong>导航框架：</strong>Navigation Component
+                    <strong>Navigation:</strong> Navigation Component
                 </div>
                 <div class="tech-item">
-                    <strong>地图服务：</strong>高德地图SDK
+                    <strong>Maps:</strong> AMap SDK
                 </div>
             </div>
         </div>
 
-        <!-- 核心功能 -->
+        <!-- Core Features -->
         <div class="slide">
-            <h2>🚀 核心功能展示</h2>
+            <h2>🚀 Core Features</h2>
             <div class="feature-grid">
                 <div class="feature-card">
                     <span class="feature-icon">🗺️</span>
-                    <h4>旅行规划</h4>
-                    <p>创建旅行计划，添加目的地和行程安排，支持时间线管理和预算设置</p>
+                    <h4>Trip Planning</h4>
+                    <p>Create travel plans, add destinations and schedules, support timeline management and budget settings</p>
                     <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>智能行程规划</li>
-                        <li>预算管理系统</li>
-                        <li>目的地推荐</li>
+                        <li>Smart itinerary planning</li>
+                        <li>Budget management system</li>
+                        <li>Destination recommendations</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📝</span>
-                    <h4>旅行日记</h4>
-                    <p>记录旅行见闻，支持富文本编辑，心情记录和评分系统</p>
+                    <h4>Travel Diary</h4>
+                    <p>Record travel stories, support rich text editing, mood tracking, and rating</p>
                     <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>富文本编辑器</li>
-                        <li>心情和评分</li>
-                        <li>天气记录</li>
+                        <li>Rich text editor</li>
+                        <li>Mood and rating</li>
+                        <li>Weather logging</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📸</span>
-                    <h4>照片管理</h4>
-                    <p>上传和管理旅行照片，支持位置标记和智能分类</p>
+                    <h4>Photo Management</h4>
+                    <p>Upload and manage travel photos, support location tagging and smart categorization</p>
                     <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>自动位置标记</li>
-                        <li>照片编辑功能</li>
-                        <li>智能相册分类</li>
+                        <li>Automatic location tagging</li>
+                        <li>Photo editing features</li>
+                        <li>Smart album categorization</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">💰</span>
-                    <h4>费用统计</h4>
-                    <p>记录旅行支出，生成详细的费用报告和预算分析</p>
+                    <h4>Expense Tracking</h4>
+                    <p>Record travel expenses, generate detailed reports and budget analysis</p>
                     <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>多币种支持</li>
-                        <li>分类统计</li>
-                        <li>预算对比分析</li>
+                        <li>Multi-currency support</li>
+                        <li>Categorized statistics</li>
+                        <li>Budget comparison analysis</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📍</span>
-                    <h4>地图集成</h4>
-                    <p>显示旅行路线和地点标记，支持离线地图和导航功能</p>
+                    <h4>Map Integration</h4>
+                    <p>Show travel routes and location markers, support offline maps and navigation</p>
                     <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>实时定位</li>
-                        <li>路线规划</li>
-                        <li>景点推荐</li>
+                        <li>Real-time location</li>
+                        <li>Route planning</li>
+                        <li>Attraction recommendations</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📤</span>
-                    <h4>分享导出</h4>
-                    <p>生成精美旅行卡片，支持多种分享方式和格式导出</p>
+                    <h4>Sharing & Export</h4>
+                    <p>Create beautiful travel cards and support multiple sharing formats</p>
                     <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li>精美模板</li>
-                        <li>PDF导出</li>
-                        <li>社交分享</li>
+                        <li>Beautiful templates</li>
+                        <li>PDF export</li>
+                        <li>Social sharing</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- 用户登录功能 -->
+        <!-- Login & Authentication -->
         <div class="slide">
-            <h2>🔐 用户登录与认证系统</h2>
+            <h2>🔐 User Login & Authentication</h2>
             <div class="highlight">
-                <h3>🛡️ 安全认证方案</h3>
-                <p>采用多层次的用户认证和数据保护机制，确保用户数据安全和隐私保护。</p>
+                <h3>🛡️ Security & Authentication</h3>
+                <p>Adopt multi-layer user authentication and data protection mechanisms to ensure data security and privacy.</p>
             </div>
 
-            <h3>登录流程设计</h3>
+            <h3>Login Flow</h3>
             <div class="login-flow">
                 <div class="flow-step">
                     <div>
                         📱<br>
-                        启动应用
+                        Launch App
                     </div>
                 </div>
                 <div class="flow-step">
                     <div>
                         🔍<br>
-                        检查登录状态
+                        Check Login Status
                     </div>
                 </div>
                 <div class="flow-step">
                     <div>
                         🔑<br>
-                        身份验证
+                        Authenticate
                     </div>
                 </div>
                 <div class="flow-step">
                     <div>
                         ✅<br>
-                        进入主界面
+                        Enter Main Screen
                     </div>
                 </div>
             </div>
@@ -598,125 +598,123 @@
             <div class="feature-grid">
                 <div class="feature-card">
                     <span class="feature-icon">📧</span>
-                    <h4>邮箱注册登录</h4>
-                    <p>支持邮箱注册和登录，包含邮箱验证和密码重置功能</p>
+                    <h4>Email Sign-up & Login</h4>
+                    <p>Support email registration and login, with email verification and password reset</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📱</span>
-                    <h4>手机号登录</h4>
-                    <p>支持手机号快速注册登录，短信验证码验证</p>
+                    <h4>Phone Login</h4>
+                    <p>Support quick phone registration and login via SMS verification code</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">👆</span>
-                    <h4>生物识别</h4>
-                    <p>支持指纹和面部识别快速登录，提升用户体验</p>
+                    <h4>Biometrics</h4>
+                    <p>Fingerprint and face recognition for fast login, enhancing user experience</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🔒</span>
-                    <h4>数据加密</h4>
-                    <p>用户数据本地加密存储，采用AES加密算法保护隐私</p>
+                    <h4>Data Encryption</h4>
+                    <p>Locally encrypted storage of user data using AES to protect privacy</p>
                 </div>
             </div>
 
-            <h3>🔧 技术实现</h3>
+            <h3>🔧 Technical Implementation</h3>
             <div class="tech-stack">
                 <div class="tech-item">
-                    <strong>认证框架：</strong>Firebase Authentication
+                    <strong>Authentication:</strong> Firebase Authentication
                 </div>
                 <div class="tech-item">
-                    <strong>本地存储：</strong>Android Keystore + SharedPreferences
+                    <strong>Local Storage:</strong> Android Keystore + SharedPreferences
                 </div>
                 <div class="tech-item">
-                    <strong>生物识别：</strong>BiometricPrompt API
+                    <strong>Biometrics:</strong> BiometricPrompt API
                 </div>
                 <div class="tech-item">
-                    <strong>数据加密：</strong>AES-256 + RSA
+                    <strong>Encryption:</strong> AES-256 + RSA
                 </div>
             </div>
         </div>
 
-        <!-- 地图集成功能 -->
+        <!-- Map Integration -->
         <div class="slide">
-            <h2>🗺️ 地图集成与位置服务</h2>
+            <h2>🗺️ Map Integration & Location Services</h2>
             <div class="highlight">
-                <h3>🌍 智能地图系统</h3>
-                <p>集成高德地图SDK，提供精准的位置服务、路线规划和景点推荐功能，为用户打造完整的地理信息体验。</p>
+                <h3>🌍 Smart Map System</h3>
+                <p>Integrate AMap SDK to provide precise location services, route planning, and attraction recommendations, delivering a complete geospatial experience.</p>
             </div>
 
-            <h3>地图核心功能</h3>
+            <h3>Core Map Features</h3>
             <div class="map-features">
                 <div class="map-feature">
                     <div style="font-size: 2em; margin-bottom: 10px;">📍</div>
-                    <h4>实时定位</h4>
-                    <p>GPS + 网络定位，精确获取用户当前位置</p>
+                    <h4>Real-time Location</h4>
+                    <p>GPS + network positioning to accurately obtain the current location</p>
                 </div>
                 <div class="map-feature">
                     <div style="font-size: 2em; margin-bottom: 10px;">🛣️</div>
-                    <h4>路线规划</h4>
-                    <p>智能规划最优旅行路线，支持多种交通方式</p>
+                    <h4>Route Planning</h4>
+                    <p>Intelligently plan optimal travel routes with multiple transport modes</p>
                 </div>
                 <div class="map-feature">
                     <div style="font-size: 2em; margin-bottom: 10px;">🏛️</div>
-                    <h4>景点标记</h4>
-                    <p>自动标记旅行地点，支持自定义标记和分类</p>
+                    <h4>POI Markers</h4>
+                    <p>Automatically mark travel locations with custom markers and categories</p>
                 </div>
                 <div class="map-feature">
                     <div style="font-size: 2em; margin-bottom: 10px;">🔍</div>
-                    <h4>地点搜索</h4>
-                    <p>强大的POI搜索功能，快速找到目标地点</p>
+                    <h4>Place Search</h4>
+                    <p>Powerful POI search to quickly find target places</p>
                 </div>
                 <div class="map-feature">
                     <div style="font-size: 2em; margin-bottom: 10px;">📱</div>
-                    <h4>离线地图</h4>
-                    <p>支持离线地图下载，无网络环境下正常使用</p>
+                    <h4>Offline Maps</h4>
+                    <p>Support offline map downloads for use without network connectivity</p>
                 </div>
                 <div class="map-feature">
                     <div style="font-size: 2em; margin-bottom: 10px;">🎯</div>
-                    <h4>智能推荐</h4>
-                    <p>基于位置的景点和餐厅推荐系统</p>
+                    <h4>Smart Recommendations</h4>
+                    <p>Location-based attraction and restaurant recommendation system</p>
                 </div>
             </div>
 
-            <h3>🛠️ 技术架构</h3>
+            <h3>🛠️ Technical Architecture</h3>
             <div class="architecture-diagram">
                 <div class="layer">
-                    <div class="layer-title">🎨 UI层 - 地图展示</div>
-                    <p>MapView + 自定义Marker + 交互控件</p>
+                    <div class="layer-title">🎨 UI Layer — Map Display</div>
+                    <p>MapView + custom markers + interactive controls</p>
                 </div>
                 <div class="layer">
-                    <div class="layer-title">🔧 业务层 - 位置服务</div>
+                    <div class="layer-title">🔧 Business Layer — Location Services</div>
                     <p>LocationManager + GeocodeService + RouteService</p>
                 </div>
                 <div class="layer">
-                    <div class="layer-title">📡 数据层 - 地图SDK</div>
-                    <p>高德地图SDK + GPS服务 + 网络定位</p>
+                    <div class="layer-title">📡 Data Layer — Map SDK</div>
+                    <p>AMap SDK + GPS services + network positioning</p>
                 </div>
             </div>
 
             <div class="tech-stack">
                 <div class="tech-item">
-                    <strong>地图SDK：</strong>高德地图 Android SDK v9.0+
+                    <strong>Map SDK:</strong> AMap Android SDK v9.0+
                 </div>
                 <div class="tech-item">
-                    <strong>定位服务：</strong>高德定位SDK + Android Location API
+                    <strong>Location Services:</strong> AMap Location SDK + Android Location API
                 </div>
                 <div class="tech-item">
-                    <strong>地理编码：</strong>Geocoding API + 逆地理编码
+                    <strong>Geocoding:</strong> Geocoding API + Reverse Geocoding
                 </div>
                 <div class="tech-item">
-                    <strong>路线规划：</strong>Route Planning API + 多种出行方式
+                    <strong>Route Planning:</strong> Route Planning API + multiple transport modes
                 </div>
             </div>
         </div>
 
-        
-
-        <!-- 数据库设计 -->
+        <!-- Database Design -->
         <div class="slide">
-            <h2>🗄️ 数据库设计</h2>
+            <h2>🗄️ Database Design</h2>
             <div class="database-schema">
                 <div class="table-card">
-                    <div class="table-header">🧳 trips (旅行表)</div>
+                    <div class="table-header">🧳 trips (Trips)</div>
                     <div class="table-fields">
                         <div class="field">id: INTEGER PRIMARY KEY</div>
                         <div class="field">title: TEXT NOT NULL</div>
@@ -732,7 +730,7 @@
                 </div>
 
                 <div class="table-card">
-                    <div class="table-header">📝 diary_entries (日记表)</div>
+                    <div class="table-header">📝 diary_entries (Diary Entries)</div>
                     <div class="table-fields">
                         <div class="field">id: INTEGER PRIMARY KEY</div>
                         <div class="field">trip_id: INTEGER FK</div>
@@ -749,7 +747,7 @@
                 </div>
 
                 <div class="table-card">
-                    <div class="table-header">📸 media_files (媒体表)</div>
+                    <div class="table-header">📸 media_files (Media Files)</div>
                     <div class="table-fields">
                         <div class="field">id: INTEGER PRIMARY KEY</div>
                         <div class="field">diary_entry_id: INTEGER FK</div>
@@ -763,7 +761,7 @@
                 </div>
 
                 <div class="table-card">
-                    <div class="table-header">💰 expenses (费用表)</div>
+                    <div class="table-header">💰 expenses (Expenses)</div>
                     <div class="table-fields">
                         <div class="field">id: INTEGER PRIMARY KEY</div>
                         <div class="field">trip_id: INTEGER FK</div>
@@ -777,7 +775,7 @@
                 </div>
 
                 <div class="table-card">
-                    <div class="table-header">📍 places (地点表)</div>
+                    <div class="table-header">📍 places (Places)</div>
                     <div class="table-fields">
                         <div class="field">id: INTEGER PRIMARY KEY</div>
                         <div class="field">trip_id: INTEGER FK</div>
@@ -793,7 +791,7 @@
                 </div>
 
                 <div class="table-card">
-                    <div class="table-header">👤 users (用户表)</div>
+                    <div class="table-header">👤 users (Users)</div>
                     <div class="table-fields">
                         <div class="field">id: INTEGER PRIMARY KEY</div>
                         <div class="field">username: TEXT UNIQUE</div>
@@ -808,192 +806,192 @@
             </div>
         </div>
 
-        <!-- 开发计划 -->
+        <!-- Development Plan -->
         <div class="slide">
-            <h2>📅 开发计划与里程碑</h2>
+            <h2>📅 Development Plan & Milestones</h2>
             <div class="highlight">
-                <h3>⏱️ 总体规划：12周完整开发周期</h3>
-                <p>采用敏捷开发方法，分5个阶段渐进式交付，确保项目质量和进度可控。</p>
+                <h3>⏱️ Overall Plan: 12-week full development cycle</h3>
+                <p>Adopt agile methodology with 5 staged, incremental deliveries to ensure controllable quality and schedule.</p>
             </div>
 
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>🎯 第一阶段：项目准备和基础搭建 (第1-2周)</h3>
+                        <h3>🎯 Phase 1: Project setup and foundations (Weeks 1–2)</h3>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 20%;">进行中 20%</div>
+                            <div class="progress-fill" style="width: 100%;">Completed 100%</div>
                         </div>
                         <ul>
-                            <li>✅ 需求分析和用户调研</li>
-                            <li>✅ 系统架构设计</li>
-                            <li>✅ 技术选型和环境搭建</li>
-                            <li>✅ 数据库设计和建模</li>
+                            <li>✅ Requirements analysis and user research</li>
+                            <li>✅ System architecture design</li>
+                            <li>✅ Tech selection and environment setup</li>
+                            <li>✅ Database design and modeling</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>🏗️ 第二阶段：核心功能开发 (第3-6周)</h3>
+                        <h3>🏗️ Phase 2: Core feature development (Weeks 3–6)</h3>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 100%;">已完成 100%</div>
+                            <div class="progress-fill" style="width: 20%;">In Progress 20%</div>
                         </div>
                         <ul>
-                            <li>✅ app框架搭建</li>
-                            <li>🔄 旅行管理功能开发</li>
-                            <li>🔄 日记编辑和管理</li>
-                            <li>🔄 照片上传和管理</li>
-                            <li>🔄 费用记录和统计</li>
-                            <li>🔄 用户认证系统</li>
+                            <li>✅ App framework setup</li>
+                            <li>🔄 Trip management development</li>
+                            <li>🔄 Diary editing and management</li>
+                            <li>🔄 Photo upload and management</li>
+                            <li>🔄 Expense recording and statistics</li>
+                            <li>🔄 User authentication system</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>🚀 第三阶段：高级功能和优化 (第7-9周)</h3>
+                        <h3>🚀 Phase 3: Advanced features & optimization (Weeks 7–9)</h3>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%;">待开始 0%</div>
+                            <div class="progress-fill" style="width: 0%;">Not Started 0%</div>
                         </div>
                         <ul>
-                            <li>🔄 地图集成和位置服务</li>
-                            <li>🔄 分享和导出功能</li>
-                            <li>🔄 个性化设置</li>
-                            <li>🔄 性能优化和内存管理</li>
+                            <li>🔄 Map integration and location services</li>
+                            <li>🔄 Sharing and export features</li>
+                            <li>🔄 Personalization settings</li>
+                            <li>🔄 Performance optimization and memory management</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h3>🧪 第四阶段：测试和发布准备 (第10-12周)</h3>
+                        <h3>🧪 Phase 4: Testing & release prep (Weeks 10–12)</h3>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%;">待开始 0%</div>
+                            <div class="progress-fill" style="width: 0%;">Not Started 0%</div>
                         </div>
                         <ul>
-                            <li>🔄 全面功能测试</li>
-                            <li>🔄 UI/UX优化和适配</li>
-                            <li>🔄 性能测试和调优</li>
-                            <li>🔄 应用打包和发布</li>
+                            <li>🔄 Full feature testing</li>
+                            <li>🔄 UI/UX optimization and adaptations</li>
+                            <li>🔄 Performance testing and tuning</li>
+                            <li>🔄 App packaging and release</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <h3>🎯 关键里程碑</h3>
+            <h3>🎯 Key Milestones</h3>
             <div class="feature-grid">
                 <div class="feature-card">
                     <span class="feature-icon">📋</span>
-                    <h4>MVP版本 (第6周)</h4>
-                    <p>完成app框架搭建，提供基本应用结构</p>
+                    <h4>MVP (Week 6)</h4>
+                    <p>App framework completed, providing basic application structure</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🎨</span>
-                    <h4>Beta版本 (第9周)</h4>
-                    <p>完成所有功能开发，进入测试和优化阶段</p>
+                    <h4>Beta (Week 9)</h4>
+                    <p>All features completed, entering testing and optimization</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🚀</span>
-                    <h4>正式版本 (第12周)</h4>
-                    <p>完成测试和优化，准备发布到应用商店</p>
+                    <h4>Release (Week 12)</h4>
+                    <p>Testing and optimization complete, ready for app store release</p>
                 </div>
             </div>
         </div>
 
-        <!-- 项目总结 -->
+        <!-- Summary & Outlook -->
         <div class="slide">
-            <h2>🎉 项目总结与展望</h2>
+            <h2>🎉 Summary & Outlook</h2>
             <div class="highlight">
-                <h3>✨ 项目亮点</h3>
-                <p>WanderLog采用现代化的Android开发技术栈，提供完整的旅行记录解决方案，具有良好的用户体验和技术架构。</p>
+                <h3>✨ Project Highlights</h3>
+                <p>WanderLog adopts a modern Android tech stack and provides a complete travel recording solution with solid user experience and technical architecture.</p>
             </div>
 
             <div class="feature-grid">
                 <div class="feature-card">
                     <span class="feature-icon">🏗️</span>
-                    <h4>技术先进性</h4>
+                    <h4>Technical Advancement</h4>
                     <ul>
                         <li>Kotlin + Jetpack Compose</li>
-                        <li>MVVM架构模式</li>
-                        <li>现代化开发工具链</li>
+                        <li>MVVM architecture pattern</li>
+                        <li>Modern development toolchain</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🎨</span>
-                    <h4>用户体验</h4>
+                    <h4>User Experience</h4>
                     <ul>
                         <li>Material Design 3</li>
-                        <li>流畅的交互动画</li>
-                        <li>直观的操作界面</li>
+                        <li>Smooth interaction animations</li>
+                        <li>Intuitive interface</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🔒</span>
-                    <h4>安全可靠</h4>
+                    <h4>Security & Reliability</h4>
                     <ul>
-                        <li>数据本地加密存储</li>
-                        <li>多重身份认证</li>
-                        <li>隐私保护机制</li>
+                        <li>Local encrypted data storage</li>
+                        <li>Multi-factor authentication</li>
+                        <li>Privacy protection mechanisms</li>
                     </ul>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">📈</span>
-                    <h4>可扩展性</h4>
+                    <h4>Scalability</h4>
                     <ul>
-                        <li>模块化架构设计</li>
-                        <li>插件化功能扩展</li>
-                        <li>云同步预留接口</li>
+                        <li>Modular architecture design</li>
+                        <li>Pluggable feature extensions</li>
+                        <li>Cloud sync reserved interfaces</li>
                     </ul>
                 </div>
             </div>
 
-            <h3>🔮 未来规划</h3>
+            <h3>🔮 Future Roadmap</h3>
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h4>短期目标 (3个月内)</h4>
+                        <h4>Short-term (within 3 months)</h4>
                         <ul>
-                            <li>完成Android版本开发和发布</li>
-                            <li>用户反馈收集和功能优化</li>
-                            <li>性能监控和稳定性提升</li>
+                            <li>Complete Android development and release</li>
+                            <li>Collect user feedback and optimize features</li>
+                            <li>Performance monitoring and stability improvements</li>
                         </ul>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h4>中期目标 (6个月内)</h4>
+                        <h4>Mid-term (within 6 months)</h4>
                         <ul>
-                            <li>iOS版本开发</li>
-                            <li>云同步功能实现</li>
-                            <li>社交分享功能增强</li>
-                            <li>AI智能推荐系统</li>
+                            <li>iOS version development</li>
+                            <li>Cloud sync implementation</li>
+                            <li>Enhanced social sharing</li>
+                            <li>AI-powered recommendation system</li>
                         </ul>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-content">
-                        <h4>长期目标 (1年内)</h4>
+                        <h4>Long-term (within 1 year)</h4>
                         <ul>
-                            <li>Web版本开发</li>
-                            <li>多平台数据同步</li>
-                            <li>商业化功能探索</li>
-                            <li>国际化支持</li>
+                            <li>Web version development</li>
+                            <li>Multi-platform data synchronization</li>
+                            <li>Commercial feature exploration</li>
+                            <li>Internationalization support</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px;">
-                <h3 style="color: white; margin-bottom: 20px;">🚀 让我们开始这段精彩的开发之旅！</h3>
-                <p style="font-size: 1.2em;">WanderLog - 记录每一次旅行，珍藏每一份回忆</p>
+                <h3 style="color: white; margin-bottom: 20px;">🚀 Let's start this exciting development journey!</h3>
+                <p style="font-size: 1.2em;">WanderLog — Record every trip, cherish every memory</p>
             </div>
         </div>
     </div>
 
     <script>
-        // 添加一些交互效果
+        // Simple interactions
         document.addEventListener('DOMContentLoaded', function() {
-            // 进度条动画
+            // Progress bar animation
             const progressBars = document.querySelectorAll('.progress-fill');
             progressBars.forEach(bar => {
                 const width = bar.style.width;
@@ -1003,7 +1001,7 @@
                 }, 1000);
             });
 
-            // 卡片悬停效果
+            // Card hover effects
             const cards = document.querySelectorAll('.feature-card, .tech-item, .stat-card');
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
@@ -1014,7 +1012,7 @@
                 });
             });
 
-            // 平滑滚动
+            // Smooth scroll
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();

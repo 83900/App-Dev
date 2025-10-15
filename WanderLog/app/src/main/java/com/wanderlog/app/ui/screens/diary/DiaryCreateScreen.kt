@@ -49,6 +49,7 @@ fun DiaryCreateScreen(
     // 检查用户认证状态
     if (authState !is AuthState.Authenticated) {
         LaunchedEffect(Unit) {
+            android.util.Log.w("DiaryCreateScreen", "User not authenticated, navigating back")
             navController.popBackStack()
         }
         return
@@ -77,30 +78,38 @@ fun DiaryCreateScreen(
             actions = {
                 TextButton(
                     onClick = {
+                        android.util.Log.d("DiaryCreateScreen", "Save diary button clicked")
+                        
                         val tagList = tags.split(",")
                             .map { it.trim() }
                             .filter { it.isNotBlank() }
                         
                         val currentAuthState = authState
                         if (currentAuthState is AuthState.Authenticated) {
+                            android.util.Log.d("DiaryCreateScreen", "Creating diary for user: ${currentAuthState.user.id}, title: $title, tripId: $tripId")
+                            
                             diaryViewModel.createDiary(
                                 userId = currentAuthState.user.id,
-                            title = title,
-                            content = content,
-                            location = location,
-                            photos = photos,
-                            tags = tagList,
-                            weather = selectedWeather?.emoji ?: "",
-                            mood = selectedMood?.emoji ?: "",
-                            isPublic = isPublic,
-                            tripId = tripId,
-                            onSuccess = { 
-                                navController.popBackStack()
-                            },
+                                title = title,
+                                content = content,
+                                location = location,
+                                photos = photos,
+                                tags = tagList,
+                                weather = selectedWeather?.emoji ?: "",
+                                mood = selectedMood?.emoji ?: "",
+                                isPublic = isPublic,
+                                tripId = tripId,
+                                onSuccess = { diary ->
+                                    android.util.Log.d("DiaryCreateScreen", "Successfully created diary: ${diary.id}")
+                                    navController.popBackStack()
+                                },
                                 onError = { error ->
+                                    android.util.Log.e("DiaryCreateScreen", "Failed to create diary: $error")
                                     // 可以显示错误提示
                                 }
                             )
+                        } else {
+                            android.util.Log.e("DiaryCreateScreen", "User not authenticated when trying to save diary")
                         }
                     },
                     enabled = title.isNotBlank() && content.isNotBlank() && !isLoading

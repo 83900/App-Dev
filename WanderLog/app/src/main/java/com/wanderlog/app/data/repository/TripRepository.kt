@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,11 +22,7 @@ import javax.inject.Singleton
 class TripRepository @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val json = Json { 
-        prettyPrint = true
-        ignoreUnknownKeys = true
-    }
-    
+    private val gson = Gson()
     private val tripsFile = File(context.filesDir, "trips.json")
     private val _trips = MutableStateFlow<List<Trip>>(emptyList())
     
@@ -87,12 +83,43 @@ class TripRepository @Inject constructor(
     suspend fun createTrip(trip: Trip): Result<Trip> {
         return withContext(Dispatchers.IO) {
             try {
+                android.util.Log.d("TripRepository", "=== CREATE TRIP CALLED ===")
+                android.util.Log.d("TripRepository", "Trip details: $trip")
+                
+                // 验证旅行数据
+                if (trip.userId.isBlank()) {
+                    android.util.Log.e("TripRepository", "createTrip failed: userId is blank")
+                    return@withContext Result.failure(Exception("用户ID不能为空"))
+                }
+                
+                if (trip.name.isBlank()) {
+                    android.util.Log.e("TripRepository", "createTrip failed: name is blank")
+                    return@withContext Result.failure(Exception("旅行名称不能为空"))
+                }
+                
+                if (trip.destination.isBlank()) {
+                    android.util.Log.e("TripRepository", "createTrip failed: destination is blank")
+                    return@withContext Result.failure(Exception("目的地不能为空"))
+                }
+                
+                android.util.Log.d("TripRepository", "Validation passed, creating trip: ${trip.name} for user: ${trip.userId}")
+                
                 val currentTrips = _trips.value.toMutableList()
+                android.util.Log.d("TripRepository", "Current trips count before adding: ${currentTrips.size}")
+                
                 currentTrips.add(trip)
+                android.util.Log.d("TripRepository", "Added trip to list, new count: ${currentTrips.size}")
+                
                 _trips.value = currentTrips
+                android.util.Log.d("TripRepository", "Updated _trips StateFlow")
+                
                 saveTrips()
+                android.util.Log.d("TripRepository", "Called saveTrips()")
+                
+                android.util.Log.d("TripRepository", "Successfully created trip: ${trip.id}")
                 Result.success(trip)
             } catch (e: Exception) {
+                android.util.Log.e("TripRepository", "createTrip exception", e)
                 Result.failure(e)
             }
         }
@@ -157,18 +184,22 @@ class TripRepository @Inject constructor(
             if (tripsFile.exists()) {
                 val jsonString = tripsFile.readText()
                 if (jsonString.isNotBlank()) {
-                    val trips = json.decodeFromString<List<Trip>>(jsonString)
+                    val type = object : TypeToken<List<Trip>>() {}.type
+                    val trips = gson.fromJson<List<Trip>>(jsonString, type) ?: emptyList()
                     _trips.value = trips
+                    android.util.Log.d("TripRepository", "Successfully loaded ${trips.size} trips from file")
                 } else {
                     // 如果文件为空，初始化为空列表
                     _trips.value = emptyList()
+                    android.util.Log.d("TripRepository", "Trips file is empty, initialized empty list")
                 }
             } else {
                 // 如果文件不存在，初始化为空列表
                 _trips.value = emptyList()
+                android.util.Log.d("TripRepository", "Trips file does not exist, initialized empty list")
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("TripRepository", "loadTrips failed", e)
             // 如果加载失败，初始化为空列表
             _trips.value = emptyList()
         }
@@ -183,8 +214,7 @@ class TripRepository @Inject constructor(
         }
         
         val sampleTrips = listOf(
-            Trip(
-                id = "trip_1_$userId",
+            Trip.create(
                 userId = userId,
                 name = "日本东京之旅",
                 description = "探索东京的现代与传统，品尝地道日料，体验日本文化。",
@@ -196,9 +226,12 @@ class TripRepository @Inject constructor(
                 budget = 15000.0,
                 currency = "CNY",
                 isPublic = true
+            ).copy(
+                id = "trip_1_$userId",
+                createdAt = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000),
+                updatedAt = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000)
             ),
-            Trip(
-                id = "trip_2_$userId",
+            Trip.create(
                 userId = userId,
                 name = "巴黎浪漫之行",
                 description = "漫步塞纳河畔，参观卢浮宫，在埃菲尔铁塔下许愿。",
@@ -210,9 +243,12 @@ class TripRepository @Inject constructor(
                 budget = 18000.0,
                 currency = "CNY",
                 isPublic = true
+            ).copy(
+                id = "trip_2_$userId",
+                createdAt = System.currentTimeMillis() - (60L * 24 * 60 * 60 * 1000),
+                updatedAt = System.currentTimeMillis() - (60L * 24 * 60 * 60 * 1000)
             ),
-            Trip(
-                id = "trip_3_$userId",
+            Trip.create(
                 userId = userId,
                 name = "泰国海岛度假",
                 description = "在普吉岛享受阳光沙滩，体验泰式按摩和热带风情。",
@@ -224,6 +260,10 @@ class TripRepository @Inject constructor(
                 budget = 8000.0,
                 currency = "CNY",
                 isPublic = true
+            ).copy(
+                id = "trip_3_$userId",
+                createdAt = System.currentTimeMillis() - (90L * 24 * 60 * 60 * 1000),
+                updatedAt = System.currentTimeMillis() - (90L * 24 * 60 * 60 * 1000)
             )
         )
         
@@ -241,10 +281,25 @@ class TripRepository @Inject constructor(
     
     private fun saveTrips() {
         try {
-            val jsonString = json.encodeToString(_trips.value)
+            android.util.Log.d("TripRepository", "=== SAVE TRIPS CALLED ===")
+            android.util.Log.d("TripRepository", "Trips to save: ${_trips.value.size}")
+            
+            // 确保父目录存在
+            if (!tripsFile.parentFile?.exists()!!) {
+                android.util.Log.d("TripRepository", "Creating parent directory: ${tripsFile.parentFile?.absolutePath}")
+                tripsFile.parentFile?.mkdirs()
+            }
+            
+            val jsonString = gson.toJson(_trips.value)
+            android.util.Log.d("TripRepository", "JSON string length: ${jsonString.length}")
+            android.util.Log.d("TripRepository", "Writing to file: ${tripsFile.absolutePath}")
+            
             tripsFile.writeText(jsonString)
+            android.util.Log.d("TripRepository", "Successfully saved ${_trips.value.size} trips to file")
+            android.util.Log.d("TripRepository", "File exists after write: ${tripsFile.exists()}")
+            android.util.Log.d("TripRepository", "File size: ${tripsFile.length()} bytes")
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("TripRepository", "saveTrips failed", e)
         }
     }
 }

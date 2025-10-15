@@ -49,9 +49,20 @@ fun TripCreateScreen(
     
     val dateFormat = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
     
-    LaunchedEffect(tripUiState.isLoading) {
-        if (!tripUiState.isLoading && isCreating && tripUiState.error == null) {
-            onNavigateBack()
+    LaunchedEffect(tripUiState.isLoading, tripUiState.error) {
+        android.util.Log.d("TripCreateScreen", "=== LaunchedEffect triggered ===")
+        android.util.Log.d("TripCreateScreen", "isLoading: ${tripUiState.isLoading}")
+        android.util.Log.d("TripCreateScreen", "error: ${tripUiState.error}")
+        android.util.Log.d("TripCreateScreen", "isCreating: $isCreating")
+        
+        if (!tripUiState.isLoading && isCreating) {
+            if (tripUiState.error == null) {
+                android.util.Log.d("TripCreateScreen", "Trip creation successful, navigating back")
+                onNavigateBack()
+            } else {
+                android.util.Log.e("TripCreateScreen", "Trip creation failed with error: ${tripUiState.error}")
+                isCreating = false
+            }
         }
     }
     
@@ -69,21 +80,51 @@ fun TripCreateScreen(
             actions = {
                 TextButton(
                     onClick = {
+                        android.util.Log.d("TripCreateScreen", "=== SAVE BUTTON CLICKED ===")
+                        android.util.Log.d("TripCreateScreen", "Current name: '$name'")
+                        android.util.Log.d("TripCreateScreen", "Current destination: '$destination'")
+                        android.util.Log.d("TripCreateScreen", "Name is not blank: ${name.isNotBlank()}")
+                        android.util.Log.d("TripCreateScreen", "Destination is not blank: ${destination.isNotBlank()}")
+                        android.util.Log.d("TripCreateScreen", "Is loading: ${tripUiState.isLoading}")
+                        android.util.Log.d("TripCreateScreen", "Button enabled condition: ${name.isNotBlank() && destination.isNotBlank() && !tripUiState.isLoading}")
+                        
                         val currentAuthState = authState
+                        android.util.Log.d("TripCreateScreen", "Auth state: $currentAuthState")
+                        android.util.Log.d("TripCreateScreen", "Auth state type: ${currentAuthState::class.simpleName}")
+                        
                         if (currentAuthState is AuthState.Authenticated) {
-                            val trip = Trip(
-                                userId = currentAuthState.user.id,
-                                name = name.trim(),
-                                description = description.trim(),
-                                destination = destination.trim(),
-                                startDate = startDate,
-                                endDate = endDate,
-                                budget = budget.toDoubleOrNull() ?: 0.0,
-                                status = status,
-                                tags = tags.split(",").map { it.trim() }.filter { it.isNotBlank() }
-                            )
-                            tripViewModel.createTrip(trip)
-                            isCreating = true
+                            android.util.Log.d("TripCreateScreen", "User authenticated: ${currentAuthState.user.id}")
+                            android.util.Log.d("TripCreateScreen", "Creating trip with name: '$name', destination: '$destination'")
+                            
+                            try {
+                                val trip = Trip.create(
+                                    userId = currentAuthState.user.id,
+                                    name = name.trim(),
+                                    description = description.trim(),
+                                    destination = destination.trim(),
+                                    startDate = startDate,
+                                    endDate = endDate,
+                                    budget = budget.toDoubleOrNull() ?: 0.0,
+                                    status = status,
+                                    tags = tags.split(",").map { it.trim() }.filter { it.isNotBlank() },
+                                    isPublic = false
+                                )
+                                
+                                android.util.Log.d("TripCreateScreen", "Created trip object with ID: ${trip.id}")
+                                android.util.Log.d("TripCreateScreen", "Trip object: $trip")
+                                android.util.Log.d("TripCreateScreen", "Calling tripViewModel.createTrip()")
+                                
+                                isCreating = true
+                                tripViewModel.createTrip(trip)
+                                
+                                android.util.Log.d("TripCreateScreen", "Trip creation call completed, isCreating set to true")
+                                android.util.Log.d("TripCreateScreen", "Current UI state after call - isLoading: ${tripUiState.isLoading}, error: ${tripUiState.error}")
+                            } catch (e: Exception) {
+                                android.util.Log.e("TripCreateScreen", "Exception creating trip", e)
+                                isCreating = false
+                            }
+                        } else {
+                            android.util.Log.w("TripCreateScreen", "User not authenticated, cannot create trip")
                         }
                     },
                     enabled = name.isNotBlank() && destination.isNotBlank() && !tripUiState.isLoading

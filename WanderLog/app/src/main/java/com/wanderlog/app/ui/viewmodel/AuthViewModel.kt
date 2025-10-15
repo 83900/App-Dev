@@ -27,10 +27,9 @@ class AuthViewModel @Inject constructor(
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
     
     init {
-        // 禁用自动登录检查，确保应用始终从登录页面开始
-        // checkCurrentUser()
-        android.util.Log.d("AuthViewModel", "AuthViewModel initialized - starting from login page")
-        _authState.value = AuthState.Unauthenticated
+        // 启用自动登录检查，恢复用户登录状态
+        android.util.Log.d("AuthViewModel", "AuthViewModel initialized - checking for existing user session")
+        checkCurrentUser()
     }
     
     private fun checkCurrentUser() {

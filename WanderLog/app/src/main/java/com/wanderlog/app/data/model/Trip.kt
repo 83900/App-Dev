@@ -1,27 +1,63 @@
 package com.wanderlog.app.data.model
 
-import kotlinx.serialization.Serializable
 import java.util.UUID
 
-@Serializable
 data class Trip(
-    val id: String = UUID.randomUUID().toString(),
-    val userId: String,
-    val name: String,
+    val id: String = "",
+    val userId: String = "",
+    val name: String = "",
     val description: String = "",
-    val destination: String,
-    val startDate: Long,
-    val endDate: Long,
+    val destination: String = "",
+    val startDate: Long = 0L,
+    val endDate: Long = 0L,
     val coverPhoto: String = "", // 封面图片路径
     val budget: Double = 0.0,
     val currency: String = "CNY",
     val status: TripStatus = TripStatus.PLANNED,
     val tags: List<String> = emptyList(),
     val participants: List<String> = emptyList(), // 参与者用户ID列表
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis(),
+    val createdAt: Long = 0L,
+    val updatedAt: Long = 0L,
     val isPublic: Boolean = false
-)
+) {
+    companion object {
+        fun create(
+            userId: String,
+            name: String,
+            description: String = "",
+            destination: String,
+            startDate: Long,
+            endDate: Long,
+            coverPhoto: String = "",
+            budget: Double = 0.0,
+            currency: String = "CNY",
+            status: TripStatus = TripStatus.PLANNED,
+            tags: List<String> = emptyList(),
+            participants: List<String> = emptyList(),
+            isPublic: Boolean = false
+        ): Trip {
+            val currentTime = System.currentTimeMillis()
+            return Trip(
+                id = UUID.randomUUID().toString(),
+                userId = userId,
+                name = name,
+                description = description,
+                destination = destination,
+                startDate = startDate,
+                endDate = endDate,
+                coverPhoto = coverPhoto,
+                budget = budget,
+                currency = currency,
+                status = status,
+                tags = tags,
+                participants = participants,
+                createdAt = currentTime,
+                updatedAt = currentTime,
+                isPublic = isPublic
+            )
+        }
+    }
+}
 
 // 旅行状态枚举
 enum class TripStatus(val displayName: String) {

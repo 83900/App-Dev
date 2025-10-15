@@ -42,7 +42,7 @@ class DiaryRepository @Inject constructor(
             android.util.Log.d("DiaryRepository", "Successfully loaded ${diaries.size} diaries from file")
             diaries
         } catch (e: Exception) {
-            android.util.Log.e("DiaryRepository", "getAllDiaries failed", e)
+            android.util.Log.e("DiaryRepository", "getAllDiaries failed: ${e.message}", e)
             emptyList()
         }
     }
@@ -154,17 +154,64 @@ class DiaryRepository @Inject constructor(
 
     // 根据用户ID获取日记
     suspend fun getDiariesByUserId(userId: String): List<TravelDiary> = withContext(Dispatchers.IO) {
-        getAllDiaries().filter { it.userId == userId }
+        try {
+            if (userId.isBlank()) {
+                android.util.Log.e("DiaryRepository", "getDiariesByUserId failed: userId is blank")
+                return@withContext emptyList()
+            }
+            
+            val allDiaries = getAllDiaries()
+            val userDiaries = allDiaries.filter { it.userId == userId }
+            android.util.Log.d("DiaryRepository", "Found ${userDiaries.size} diaries for user: $userId")
+            userDiaries
+        } catch (e: Exception) {
+            android.util.Log.e("DiaryRepository", "getDiariesByUserId failed for user: $userId", e)
+            emptyList()
+        }
     }
     
     // 根据旅行ID获取日记
     suspend fun getDiariesByTrip(userId: String, tripId: String): List<TravelDiary> = withContext(Dispatchers.IO) {
-        getAllDiaries().filter { it.userId == userId && it.tripId == tripId }
+        try {
+            if (userId.isBlank()) {
+                android.util.Log.e("DiaryRepository", "getDiariesByTrip failed: userId is blank")
+                return@withContext emptyList()
+            }
+            
+            if (tripId.isBlank()) {
+                android.util.Log.e("DiaryRepository", "getDiariesByTrip failed: tripId is blank")
+                return@withContext emptyList()
+            }
+            
+            val allDiaries = getAllDiaries()
+            val tripDiaries = allDiaries.filter { it.userId == userId && it.tripId == tripId }
+            android.util.Log.d("DiaryRepository", "Found ${tripDiaries.size} diaries for user: $userId, trip: $tripId")
+            tripDiaries
+        } catch (e: Exception) {
+            android.util.Log.e("DiaryRepository", "getDiariesByTrip failed for user: $userId, trip: $tripId", e)
+            emptyList()
+        }
     }
     
     // 根据ID获取单个日记
     suspend fun getDiaryById(diaryId: String): TravelDiary? = withContext(Dispatchers.IO) {
-        getAllDiaries().find { it.id == diaryId }
+        try {
+            if (diaryId.isBlank()) {
+                android.util.Log.e("DiaryRepository", "getDiaryById failed: diaryId is blank")
+                return@withContext null
+            }
+            
+            val diary = getAllDiaries().find { it.id == diaryId }
+            if (diary != null) {
+                android.util.Log.d("DiaryRepository", "Found diary with ID: $diaryId")
+            } else {
+                android.util.Log.w("DiaryRepository", "No diary found with ID: $diaryId")
+            }
+            diary
+        } catch (e: Exception) {
+            android.util.Log.e("DiaryRepository", "getDiaryById failed for ID: $diaryId", e)
+            null
+        }
     }
     
     // 保存日记
@@ -181,6 +228,13 @@ class DiaryRepository @Inject constructor(
                 return@withContext false
             }
             
+            if (diary.content.isBlank()) {
+                android.util.Log.e("DiaryRepository", "saveDiary failed: content is blank")
+                return@withContext false
+            }
+            
+            android.util.Log.d("DiaryRepository", "Attempting to save diary: ${diary.id} for user: ${diary.userId}")
+            
             val diaries = getAllDiaries().toMutableList()
             val existingIndex = diaries.indexOfFirst { it.id == diary.id }
             
@@ -196,7 +250,8 @@ class DiaryRepository @Inject constructor(
             
             // 确保父目录存在
             if (!diariesFile.parentFile?.exists()!!) {
-                diariesFile.parentFile?.mkdirs()
+                val created = diariesFile.parentFile?.mkdirs()
+                android.util.Log.d("DiaryRepository", "Created parent directories: $created")
             }
             
             val json = gson.toJson(diaries)
@@ -205,7 +260,7 @@ class DiaryRepository @Inject constructor(
             android.util.Log.d("DiaryRepository", "Successfully saved diary to file: ${diariesFile.absolutePath}")
             true
         } catch (e: Exception) {
-            android.util.Log.e("DiaryRepository", "saveDiary failed", e)
+            android.util.Log.e("DiaryRepository", "saveDiary failed for diary: ${diary.id}", e)
             false
         }
     }
@@ -213,17 +268,27 @@ class DiaryRepository @Inject constructor(
     // 删除日记
     suspend fun deleteDiary(diaryId: String): Boolean = withContext(Dispatchers.IO) {
         try {
+            if (diaryId.isBlank()) {
+                android.util.Log.e("DiaryRepository", "deleteDiary failed: diaryId is blank")
+                return@withContext false
+            }
+            
+            android.util.Log.d("DiaryRepository", "Attempting to delete diary: $diaryId")
+            
             val diaries = getAllDiaries().toMutableList()
             val removed = diaries.removeIf { it.id == diaryId }
             
             if (removed) {
                 val json = gson.toJson(diaries)
                 diariesFile.writeText(json)
+                android.util.Log.d("DiaryRepository", "Successfully deleted diary: $diaryId")
+            } else {
+                android.util.Log.w("DiaryRepository", "No diary found to delete with ID: $diaryId")
             }
             
             removed
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("DiaryRepository", "deleteDiary failed for ID: $diaryId", e)
             false
         }
     }

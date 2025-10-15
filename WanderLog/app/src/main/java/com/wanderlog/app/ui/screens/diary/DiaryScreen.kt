@@ -36,6 +36,8 @@ fun DiaryScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
     diaryViewModel: DiaryViewModel = hiltViewModel()
 ) {
+    android.util.Log.d("DiaryScreen", "DiaryScreen composable started")
+    
     val authState by authViewModel.authState.collectAsState()
     val diaries by diaryViewModel.diaries.collectAsState()
     val isLoading by diaryViewModel.isLoading.collectAsState()
@@ -43,39 +45,153 @@ fun DiaryScreen(
     
     var searchQuery by remember { mutableStateOf("") }
     
-    // 监听认证状态变化
+    android.util.Log.d("DiaryScreen", "Current auth state: $authState")
+    android.util.Log.d("DiaryScreen", "Diaries count: ${diaries.size}, isLoading: $isLoading, error: $error")
+    
+    // 只在用户已认证时加载日记数据
     LaunchedEffect(authState) {
-        val currentAuthState = authState
-        when (currentAuthState) {
-            is AuthState.Unauthenticated -> {
-                navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Diary.route) { inclusive = true }
+        android.util.Log.d("DiaryScreen", "LaunchedEffect triggered with authState: $authState")
+        try {
+            val currentAuthState = authState
+            when (currentAuthState) {
+                is AuthState.Authenticated -> {
+                    android.util.Log.d("DiaryScreen", "User authenticated: ${currentAuthState.user.id}, loading diaries")
+                    try {
+                        diaryViewModel.loadDiaries(currentAuthState.user.id)
+                    } catch (e: Exception) {
+                        android.util.Log.e("DiaryScreen", "Failed to load diaries for user: ${currentAuthState.user.id}", e)
+                    }
+                }
+                else -> {
+                    android.util.Log.d("DiaryScreen", "Auth state is not authenticated: $currentAuthState")
                 }
             }
-            is AuthState.Authenticated -> {
-                diaryViewModel.loadDiaries(currentAuthState.user.id)
-            }
-            else -> {}
+        } catch (e: Exception) {
+            android.util.Log.e("DiaryScreen", "Exception in LaunchedEffect", e)
         }
     }
     
     // 处理错误信息
     error?.let { errorMessage ->
         LaunchedEffect(errorMessage) {
-            // 可以显示 Snackbar 或其他错误提示
-            diaryViewModel.clearError()
+            android.util.Log.e("DiaryScreen", "Diary error occurred: $errorMessage")
+            try {
+                // 可以显示 Snackbar 或其他错误提示
+                diaryViewModel.clearError()
+            } catch (e: Exception) {
+                android.util.Log.e("DiaryScreen", "Failed to clear error", e)
+            }
         }
     }
     
-    if (authState !is AuthState.Authenticated) {
-        // 显示加载状态或空白页面
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
+    // 如果用户未认证，显示需要登录的提示
+    val currentAuthState = authState
+    when (currentAuthState) {
+        is AuthState.Unauthenticated -> {
+            android.util.Log.d("DiaryScreen", "User is unauthenticated, showing login required message")
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "请先登录",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "登录后即可查看和创建旅行日记",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            return
         }
-        return
+        is AuthState.Loading -> {
+            android.util.Log.d("DiaryScreen", "Auth state is loading, showing loading indicator")
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            return
+        }
+        is AuthState.Error -> {
+            android.util.Log.d("DiaryScreen", "Auth state has error: ${currentAuthState.message}, showing login required message")
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Error,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        text = "认证出错",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = currentAuthState.message,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
+            }
+            return
+        }
+        is AuthState.RegistrationSuccess -> {
+            android.util.Log.d("DiaryScreen", "Registration successful, but user not authenticated yet")
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "注册成功",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "请登录以查看日记",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            return
+        }
+        is AuthState.Authenticated -> {
+            android.util.Log.d("DiaryScreen", "User is authenticated: ${currentAuthState.user.id}, showing diary content")
+            // 继续显示日记内容
+        }
     }
     Column(
         modifier = Modifier
@@ -94,7 +210,12 @@ fun DiaryScreen(
             actions = {
                 IconButton(
                     onClick = { 
-                        navController.navigate(Screen.TripSelection.route)
+                        android.util.Log.d("DiaryScreen", "Add diary button clicked, navigating to trip selection")
+                        try {
+                            navController.navigate(Screen.TripSelection.route)
+                        } catch (e: Exception) {
+                            android.util.Log.e("DiaryScreen", "Failed to navigate to trip selection", e)
+                        }
                     }
                 ) {
                     Icon(
@@ -116,7 +237,12 @@ fun DiaryScreen(
                 searchQuery = query
                 val currentAuthState = authState
                 if (currentAuthState is AuthState.Authenticated) {
-                    diaryViewModel.searchDiaries(currentAuthState.user.id, query)
+                    android.util.Log.d("DiaryScreen", "Search query changed: $query for user: ${currentAuthState.user.id}")
+                    try {
+                        diaryViewModel.searchDiaries(currentAuthState.user.id, query)
+                    } catch (e: Exception) {
+                        android.util.Log.e("DiaryScreen", "Failed to search diaries", e)
+                    }
                 }
             },
             label = { Text("搜索日记") },
@@ -134,7 +260,12 @@ fun DiaryScreen(
                             searchQuery = ""
                             val currentAuthState = authState
                             if (currentAuthState is AuthState.Authenticated) {
-                                diaryViewModel.loadDiaries(currentAuthState.user.id)
+                                android.util.Log.d("DiaryScreen", "Clear search clicked, reloading diaries for user: ${currentAuthState.user.id}")
+                                try {
+                                    diaryViewModel.loadDiaries(currentAuthState.user.id)
+                                } catch (e: Exception) {
+                                    android.util.Log.e("DiaryScreen", "Failed to reload diaries after clearing search", e)
+                                }
                             }
                         }
                     ) {
@@ -170,7 +301,12 @@ fun DiaryScreen(
                     item {
                         EmptyDiaryState(
                             onCreateDiary = {
-                                navController.navigate(Screen.TripSelection.route)
+                                android.util.Log.d("DiaryScreen", "Empty state create diary clicked")
+                                try {
+                                    navController.navigate(Screen.TripSelection.route)
+                                } catch (e: Exception) {
+                                    android.util.Log.e("DiaryScreen", "Failed to navigate to trip selection from empty state", e)
+                                }
                             }
                         )
                     }
@@ -179,7 +315,12 @@ fun DiaryScreen(
                         DiaryCard(
                             diary = diary,
                             onClick = { 
-                                navController.navigate("diary_detail/${diary.id}")
+                                android.util.Log.d("DiaryScreen", "Diary card clicked: ${diary.id}")
+                                try {
+                                    navController.navigate(Screen.DiaryDetail.createDiaryDetailRoute(diary.id))
+                                } catch (e: Exception) {
+                                    android.util.Log.e("DiaryScreen", "Failed to navigate to diary detail: ${diary.id}", e)
+                                }
                             }
                         )
                     }

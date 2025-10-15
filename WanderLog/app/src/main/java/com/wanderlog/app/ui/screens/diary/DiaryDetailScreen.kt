@@ -17,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.wanderlog.app.data.model.AuthState
 import com.wanderlog.app.data.model.TravelDiary
-
+import com.wanderlog.app.navigation.Screen
 import com.wanderlog.app.ui.viewmodel.AuthViewModel
 import com.wanderlog.app.ui.viewmodel.DiaryViewModel
 import java.text.SimpleDateFormat
@@ -79,7 +79,7 @@ fun DiaryDetailScreen(
                     currentDiary.userId == currentAuthState.user.id) {
                     IconButton(
                         onClick = {
-                            navController.navigate("diary_edit/$diaryId")
+                            navController.navigate(Screen.DiaryEdit.createDiaryEditRoute(diaryId))
                         }
                     ) {
                         Icon(

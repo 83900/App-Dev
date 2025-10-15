@@ -57,19 +57,25 @@ class TripViewModel @Inject constructor(
     
     fun createTrip(trip: Trip) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            
+            android.util.Log.d("TripViewModel", "Creating trip: ${trip.name} for user: ${trip.userId}")
             
             tripRepository.createTrip(trip)
-                .onSuccess {
+                .onSuccess { createdTrip ->
+                    android.util.Log.d("TripViewModel", "Successfully created trip: ${createdTrip.id}")
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = null
                     )
+                    // 重新加载旅行列表以更新UI
+                    loadTrips(trip.userId)
                 }
                 .onFailure { error ->
+                    android.util.Log.e("TripViewModel", "Failed to create trip: ${error.message}", error)
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        error = error.message
+                        error = error.message ?: "创建旅行失败，请稍后重试"
                     )
                 }
         }
