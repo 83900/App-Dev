@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.wanderlog.app.navigation.WanderLogNavigation
 import com.wanderlog.app.ui.components.BottomNavigationBar
 import com.wanderlog.app.ui.theme.WanderLogTheme
@@ -31,11 +32,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WanderLogApp() {
     val navController = rememberNavController()
+    val navBackStackEntry = navController.currentBackStackEntryAsState().value
+    val currentRoute = navBackStackEntry?.destination?.route
     
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            val routes = com.wanderlog.app.navigation.bottomNavItems.map { it.route }
+            if (currentRoute in routes) {
+                BottomNavigationBar(navController = navController)
+            }
         }
     ) { innerPadding ->
         WanderLogNavigation(

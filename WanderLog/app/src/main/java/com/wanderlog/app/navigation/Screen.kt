@@ -13,6 +13,11 @@ sealed class Screen(
     val title: String,
     val icon: ImageVector
 ) {
+    object Login : Screen(
+        route = "login",
+        title = "登录",
+        icon = Icons.Default.AccountCircle
+    )
     object Home : Screen(
         route = "home",
         title = "首页",

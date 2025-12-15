@@ -25,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.wanderlog.app.ui.viewmodel.AuthViewModel
+import com.wanderlog.app.navigation.Screen
 import com.wanderlog.app.ui.theme.Primary
 import com.wanderlog.app.ui.theme.Secondary
 import com.wanderlog.app.ui.theme.Surface
@@ -35,6 +38,7 @@ import com.wanderlog.app.ui.theme.Error
 fun ProfileScreen(
     navController: NavController
 ) {
+    val authViewModel: AuthViewModel = hiltViewModel()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -191,7 +195,13 @@ fun ProfileScreen(
                         icon = Icons.Default.Logout,
                         title = "退出登录",
                         subtitle = "安全退出当前账户",
-                        onClick = { /* TODO: 退出登录 */ },
+                        onClick = {
+                            authViewModel.logout()
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(Screen.Home.route) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        },
                         textColor = Error
                     )
                 }
