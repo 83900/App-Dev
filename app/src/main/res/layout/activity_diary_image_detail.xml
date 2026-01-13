@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- 返回按钮 -->
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@android:drawable/ic_menu_revert"
+        android:tint="@android:color/white"
+        android:background="@android:color/transparent"
+        android:padding="12dp"
+        android:contentDescription="返回" />
+
+    <!-- ViewPager用于显示图片 -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_images"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

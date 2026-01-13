@@ -1,0 +1,364 @@
+package com.example.wonderlog
+
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.wonderlog.data.UserItem
+import com.example.wonderlog.utils.FileUtils
+import com.example.wonderlog.utils.JsonUtils
+import com.example.wonderlog.utils.SharedPreferencesUtils
+import java.io.File
+import java.io.FileOutputStream
+import java.util.UUID
+import android.graphics.ImageDecoder
+
+class ModifyProfileActivity : AppCompatActivity() {
+    
+    private lateinit var btnBack: ImageButton
+    private lateinit var ivAvatar: ImageView
+    private lateinit var btnSelectAvatar: Button
+    private lateinit var etNickname: EditText
+    private lateinit var btnSave: Button
+    
+    private var avatarUri: Uri? = null
+    private var avatarFilePath: String = "" // 用于存储头像文件路径
+    
+    // 请求码
+    private val PICK_IMAGE_REQUEST = 1
+    private val PERMISSION_REQUEST_CODE = 2
+    
+    // 头像存储目录
+    private val AVATAR_DIR = "avatars"
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_modify_profile)
+        
+        // 初始化视图
+        btnBack = findViewById(R.id.btn_back)
+        ivAvatar = findViewById(R.id.iv_avatar)
+        btnSelectAvatar = findViewById(R.id.btn_select_avatar)
+        etNickname = findViewById(R.id.et_nickname)
+        btnSave = findViewById(R.id.btn_save)
+        
+        // 加载当前用户信息
+        loadCurrentUserInfo()
+        
+        // 设置返回按钮点击事件
+        btnBack.setOnClickListener {
+            finish()
+        }
+        
+        // 设置头像选择按钮点击事件
+        btnSelectAvatar.setOnClickListener {
+            // 检查权限
+            if (checkStoragePermission()) {
+                openImagePicker()
+            } else {
+                requestStoragePermission()
+            }
+        }
+        
+        // 设置保存按钮点击事件
+        btnSave.setOnClickListener {
+            saveProfileChanges()
+        }
+    }
+    
+    /**
+     * 加载当前用户信息
+     */
+    private fun loadCurrentUserInfo() {
+        // 获取当前登录用户ID
+        val currentUserId = SharedPreferencesUtils.getCurrentUserId(this) ?: return
+        
+        // 读取所有用户数据
+        val allUsersJson = FileUtils.readUserData(this)
+        val allUsers = allUsersJson?.let {
+            JsonUtils.jsonStringToUserItemList(it)
+        } ?: emptyList()
+        
+        // 查找当前登录用户
+        val currentUser = allUsers.find { it.id == currentUserId }
+        if (currentUser != null) {
+            // 设置昵称
+            etNickname.setText(currentUser.nickname)
+            
+            // 设置头像
+            if (!currentUser.avatar.isNullOrEmpty()) {
+                try {
+                    if (currentUser.avatar == "default") {
+                        // 使用默认头像
+                        ivAvatar.setImageResource(R.drawable.header)
+                    } else {
+                        // 从文件路径加载头像
+                        val avatarFile = File(getExternalFilesDir(null), currentUser.avatar)
+                        if (avatarFile.exists()) {
+                            val bitmap = BitmapFactory.decodeFile(avatarFile.absolutePath)
+                            ivAvatar.setImageBitmap(bitmap)
+                        } else {
+                            // 文件不存在，使用默认头像
+                            ivAvatar.setImageResource(R.drawable.header)
+                        }
+                    }
+                    // 保存当前头像路径
+                    avatarFilePath = currentUser.avatar
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    ivAvatar.setImageResource(R.drawable.header)
+                    avatarFilePath = "default"
+                }
+            } else {
+                // 没有头像，使用默认头像
+                ivAvatar.setImageResource(R.drawable.header)
+                avatarFilePath = "default"
+            }
+        }
+    }
+    
+    /**
+     * 检查存储权限
+     */
+    private fun checkStoragePermission(): Boolean {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13及以上，使用READ_MEDIA_IMAGES权限
+            android.Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            // Android 12及以下，使用READ_EXTERNAL_STORAGE权限
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+    
+    /**
+     * 请求存储权限
+     */
+    private fun requestStoragePermission() {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13及以上，使用READ_MEDIA_IMAGES权限
+            android.Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            // Android 12及以下，使用READ_EXTERNAL_STORAGE权限
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        
+        // 明确请求权限
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(permission),
+            PERMISSION_REQUEST_CODE
+        )
+    }
+    
+    /**
+     * 权限请求结果处理
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 权限授予，打开图片选择器
+                openImagePicker()
+            } else {
+                // 权限拒绝，显示提示
+                Toast.makeText(this, "需要存储权限才能选择头像", Toast.LENGTH_SHORT).show()
+                
+                // 只有当用户至少拒绝过一次权限后，shouldShowRequestPermissionRationale才会准确反映
+                // 这里简化处理，不直接跳转到设置页面，避免错误引导
+            }
+        }
+    }
+    
+    /**
+     * 打开图片选择器
+     */
+    private fun openImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+    
+    /**
+     * 处理图片选择结果
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+            val selectedUri = data.data!! // 非空断言，因为前面已经检查过非空
+            
+            try {
+                // 处理并保存图片
+                avatarFilePath = saveAvatarImage(selectedUri)
+                if (avatarFilePath.isNotEmpty()) {
+                    // 显示图片
+                    ivAvatar.setImageURI(selectedUri)
+                    Toast.makeText(this, "头像选择成功", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "头像处理失败，请重试", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
+    /**
+     * 保存头像图片到文件
+     */
+    private fun saveAvatarImage(uri: Uri): String {
+        return try {
+            // 解码图片并进行缩放
+            val bitmap = decodeSampledBitmapFromUri(uri, 200, 200)
+            
+            // 创建头像存储目录
+            val avatarDir = File(getExternalFilesDir(null), AVATAR_DIR)
+            if (!avatarDir.exists()) {
+                avatarDir.mkdirs()
+            }
+            
+            // 创建头像文件
+            val avatarFile = File(avatarDir, "avatar_${UUID.randomUUID()}.png")
+            
+            // 保存图片
+            FileOutputStream(avatarFile).use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 80, it)
+            }
+            
+            // 返回相对路径（用于存储在JSON中）
+            return "${AVATAR_DIR}/${avatarFile.name}"
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+    
+    /**
+     * 从Uri解码并缩放Bitmap
+     */
+    private fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int): Bitmap {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // 使用现代API ImageDecoder（Android P及以上）
+            val source = ImageDecoder.createSource(contentResolver, uri)
+            val bitmap = ImageDecoder.decodeBitmap(source) {
+                decoder, info, source ->
+                // 设置解码选项，包括缩放
+                val scale = Math.min(
+                    info.size.width.toFloat() / reqWidth,
+                    info.size.height.toFloat() / reqHeight
+                )
+                decoder.setTargetSize(
+                    (info.size.width / scale).toInt(),
+                    (info.size.height / scale).toInt()
+                )
+            }
+            bitmap
+        } else {
+            // 兼容旧版本API
+            BitmapFactory.Options().run {
+                inJustDecodeBounds = true
+                contentResolver.openInputStream(uri)?.use {
+                    BitmapFactory.decodeStream(it, null, this)
+                }
+                
+                inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
+                inJustDecodeBounds = false
+                
+                contentResolver.openInputStream(uri)?.use {
+                    BitmapFactory.decodeStream(it, null, this)
+                }
+            } ?: Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        }
+    }
+    
+    /**
+     * 计算合适的采样率
+     */
+    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        // 原始宽高
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+        
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+            
+            // 计算最大的inSampleSize，使得宽高都大于等于请求的宽高
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        
+        return inSampleSize
+    }
+    
+    /**
+     * 保存个人资料修改
+     */
+    private fun saveProfileChanges() {
+        // 获取当前登录用户ID
+        val currentUserId = SharedPreferencesUtils.getCurrentUserId(this) ?: return
+        
+        // 获取输入的昵称
+        val nickname = etNickname.text.toString().trim()
+        
+        // 验证输入
+        if (nickname.isEmpty()) {
+            Toast.makeText(this, "昵称不能为空", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // 读取所有用户数据
+        val allUsersJson = FileUtils.readUserData(this)
+        val allUsers = allUsersJson?.let {
+            JsonUtils.jsonStringToUserItemList(it)
+        } ?: emptyList()
+        
+        // 查找当前登录用户
+        val currentUserIndex = allUsers.indexOfFirst { it.id == currentUserId }
+        if (currentUserIndex != -1) {
+            // 创建更新后的用户对象
+            val updatedUser = allUsers[currentUserIndex].copy(
+                nickname = nickname,
+                avatar = avatarFilePath
+            )
+            
+            // 更新用户列表
+            val updatedUsers = allUsers.toMutableList()
+            updatedUsers[currentUserIndex] = updatedUser
+            
+            // 保存更新后的用户数据到文件
+            val jsonString = JsonUtils.userItemListToJsonString(updatedUsers)
+            val saveSuccess = FileUtils.saveUserData(this, jsonString)
+            
+            if (saveSuccess) {
+                Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show()
+                // 返回上一页
+                finish()
+            } else {
+                Toast.makeText(this, "修改失败，请重试", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
