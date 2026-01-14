@@ -109,7 +109,7 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
             if (isFollowMode) {
                 // 切换到跟随模式
                 myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW)
-                Toast.makeText(requireContext(), "已切换到跟随模式", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.map_follow_mode, Toast.LENGTH_SHORT).show()
                 // 如果有当前位置，移动地图到当前位置
                 currentLocation?.let {
                     aMap.moveCamera(
@@ -122,7 +122,7 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
             } else {
                 // 切换到只显示模式
                 myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW)
-                Toast.makeText(requireContext(), "已切换到显示模式", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.map_show_mode, Toast.LENGTH_SHORT).show()
             }
             myLocationStyle.showMyLocation(true)
             aMap.myLocationStyle = myLocationStyle
@@ -149,7 +149,7 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
     private fun performSearch() {
         val keyword = searchEditText.text.toString().trim()
         if (keyword.isEmpty()) {
-            Toast.makeText(requireContext(), "请输入搜索关键词", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.error_search_keyword_empty, Toast.LENGTH_SHORT).show()
             return
         }
         
@@ -179,7 +179,7 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
             // 更新位置信息卡片
             updateSearchResultCard(poiItem)
         } else {
-            Toast.makeText(requireContext(), "未找到相关地点", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.error_location_not_found, Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -188,8 +188,8 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
      */
     private fun updateSearchResultCard(poiItem: PoiItem) {
         cardLocationName.text = poiItem.title
-        cardLatitudeText.text = String.format("纬度: %.4f°N", poiItem.latLonPoint.latitude)
-        cardLongitudeText.text = String.format("经度: %.4f°E", poiItem.latLonPoint.longitude)
+        cardLatitudeText.text = getString(R.string.format_latitude, poiItem.latLonPoint.latitude)
+        cardLongitudeText.text = getString(R.string.format_longitude, poiItem.latLonPoint.longitude)
     }
     
     /**
@@ -199,7 +199,7 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
         if (rCode == AMapException.CODE_AMAP_SUCCESS && result != null) {
             handlePoiSearchResult(result)
         } else {
-            Toast.makeText(requireContext(), "搜索失败: $rCode", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.error_search_failed, rCode), Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -270,8 +270,8 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
             // 更新旧的UI显示
             val formattedLocation = LocationService.formatLocation(it)
             locationText.text = formattedLocation
-            latitudeText.text = String.format("纬度: %.4f°N", it.latitude)
-            longitudeText.text = String.format("经度: %.4f°E", it.longitude)
+            latitudeText.text = getString(R.string.format_latitude, it.latitude)
+            longitudeText.text = getString(R.string.format_longitude, it.longitude)
             
             // 更新新的位置信息卡片
             updateLocationCard(it)
@@ -283,13 +283,13 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
      */
     private fun updateLocationCard(location: AMapLocation) {
         val locationName = if (location.poiName.isNullOrEmpty()) {
-            location.address ?: "未知位置"
+            location.address ?: getString(R.string.unknown_location)
         } else {
             location.poiName
         }
         cardLocationName.text = locationName
-        cardLatitudeText.text = String.format("纬度: %.4f°N", location.latitude)
-        cardLongitudeText.text = String.format("经度: %.4f°E", location.longitude)
+        cardLatitudeText.text = getString(R.string.format_latitude, location.latitude)
+        cardLongitudeText.text = getString(R.string.format_longitude, location.longitude)
     }
     
     /**
@@ -330,7 +330,7 @@ class MapFragment : Fragment(), AMapLocationListener, PoiSearch.OnPoiSearchListe
                 // 权限被拒绝，显示提示信息
                 Toast.makeText(
                     requireContext(),
-                    "定位权限被拒绝，无法获取位置信息",
+                    R.string.error_location_permission_denied,
                     Toast.LENGTH_SHORT
                 ).show()
             }

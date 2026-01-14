@@ -40,17 +40,28 @@ class ModifyExpenseActivity : AppCompatActivity() {
     private var selectedTravelEndDate: String = ""
 
     // 消费类别列表
-    private val categories = listOf("交通", "饮食", "购物", "住宿", "景点", "娱乐")
-
+    private val categories by lazy {
+        listOf(
+            getString(R.string.cat_transport),
+            getString(R.string.cat_food),
+            getString(R.string.cat_shopping),
+            getString(R.string.cat_accommodation),
+            getString(R.string.cat_sightseeing),
+            getString(R.string.cat_entertainment)
+        )
+    }
+    
     // 类别图标映射
-    private val categoryIcons = mapOf(
-        "交通" to android.R.drawable.ic_menu_directions,
-        "饮食" to android.R.drawable.ic_menu_compass,
-        "购物" to android.R.drawable.ic_menu_share,
-        "住宿" to android.R.drawable.ic_menu_myplaces,
-        "景点" to android.R.drawable.ic_menu_gallery,
-        "娱乐" to android.R.drawable.ic_media_play
-    )
+    private val categoryIcons by lazy {
+        mapOf(
+            getString(R.string.cat_transport) to android.R.drawable.ic_menu_directions,
+            getString(R.string.cat_food) to android.R.drawable.ic_menu_compass,
+            getString(R.string.cat_shopping) to android.R.drawable.ic_menu_share,
+            getString(R.string.cat_accommodation) to android.R.drawable.ic_menu_myplaces,
+            getString(R.string.cat_sightseeing) to android.R.drawable.ic_menu_gallery,
+            getString(R.string.cat_entertainment) to android.R.drawable.ic_media_play
+        )
+    }
 
     // 用于日期格式化的SimpleDateFormat
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -140,7 +151,7 @@ class ModifyExpenseActivity : AppCompatActivity() {
         // 获取当前登录用户ID
         val currentUserId = SharedPreferencesUtils.getCurrentUserId(this) ?: ""
         if (currentUserId.isEmpty()) {
-            Toast.makeText(this, "用户未登录", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_user_not_logged_in, Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -152,7 +163,7 @@ class ModifyExpenseActivity : AppCompatActivity() {
         } ?: emptyList()
 
         if (travelList.isEmpty()) {
-            Toast.makeText(this, "请先创建旅行", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_create_trip_first, Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -180,7 +191,13 @@ class ModifyExpenseActivity : AppCompatActivity() {
                 // 解析当前旅行的日期范围
                 val selectedTravel = travelList[travelIndex]
                 val dateRange = selectedTravel.date
-                if (dateRange.contains(" 至 ")) {
+                if (dateRange.contains(" to ")) {
+                    val dates = dateRange.split(" to ")
+                    if (dates.size == 2) {
+                        selectedTravelStartDate = dates[0]
+                        selectedTravelEndDate = dates[1]
+                    }
+                } else if (dateRange.contains(" 至 ")) {
                     val dates = dateRange.split(" 至 ")
                     if (dates.size == 2) {
                         selectedTravelStartDate = dates[0]
@@ -204,7 +221,13 @@ class ModifyExpenseActivity : AppCompatActivity() {
                     
                     // 解析旅行日期范围
                     val dateRange = selectedTravel.date
-                    if (dateRange.contains(" 至 ")) {
+                    if (dateRange.contains(" to ")) {
+                        val dates = dateRange.split(" to ")
+                        if (dates.size == 2) {
+                            selectedTravelStartDate = dates[0]
+                            selectedTravelEndDate = dates[1]
+                        }
+                    } else if (dateRange.contains(" 至 ")) {
                         val dates = dateRange.split(" 至 ")
                         if (dates.size == 2) {
                             selectedTravelStartDate = dates[0]
@@ -221,7 +244,7 @@ class ModifyExpenseActivity : AppCompatActivity() {
                     if (selectedTravelId != currentExpenseItem.travelId) {
                         // 清空已选择的日期，因为旅行变更后，原日期可能不再有效
                         selectedDate = ""
-                        btnSelectDate.text = "请选择消费日期"
+                        btnSelectDate.text = getString(R.string.select_expense_date)
                     }
                 }
 
@@ -330,6 +353,13 @@ class ModifyExpenseActivity : AppCompatActivity() {
             return
         }
 
+        // 获取当前登录用户ID
+        val currentUserId = SharedPreferencesUtils.getCurrentUserId(this) ?: ""
+        if (currentUserId.isEmpty()) {
+            Toast.makeText(this, R.string.error_user_not_logged_in, Toast.LENGTH_SHORT).show()
+            return
+        }
+
         // 获取类别对应的图标
         val iconResId = categoryIcons[selectedCategory] ?: android.R.drawable.ic_menu_gallery
 
@@ -356,12 +386,12 @@ class ModifyExpenseActivity : AppCompatActivity() {
      */
     private fun validateForm(title: String, amount: String): Boolean {
         if (title.isEmpty()) {
-            Toast.makeText(this, "请输入消费名称", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_expense_name, Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (amount.isEmpty()) {
-            Toast.makeText(this, "请输入消费金额", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_amount, Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -369,22 +399,22 @@ class ModifyExpenseActivity : AppCompatActivity() {
         try {
             amount.toDouble()
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, "请输入有效的消费金额", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_invalid_amount, Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (selectedDate.isEmpty()) {
-            Toast.makeText(this, "请选择消费日期", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.select_expense_date, Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (selectedTravelId.isEmpty()) {
-            Toast.makeText(this, "请选择所属旅行", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_trip, Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (selectedCategory.isEmpty()) {
-            Toast.makeText(this, "请选择消费类别", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_category, Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -412,9 +442,9 @@ class ModifyExpenseActivity : AppCompatActivity() {
         val saveSuccess = FileUtils.saveExpenseData(this, updatedJson)
 
         if (saveSuccess) {
-            Toast.makeText(this, "费用修改成功", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.expense_modify_success, Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "费用修改失败", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_expense_modify_failed, Toast.LENGTH_SHORT).show()
         }
     }
 }

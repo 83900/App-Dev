@@ -111,7 +111,7 @@ class NewDiaryActivity : AppCompatActivity() {
         
         // 如果没有旅行记录，提示用户并关闭Activity
         if (travelList.isEmpty()) {
-            Toast.makeText(this, "请先创建旅行", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_create_trip_first, Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -131,7 +131,13 @@ class NewDiaryActivity : AppCompatActivity() {
                 
                 // 解析所选旅行的开始日期和结束日期
                 val travelItem = travelList[position]
-                val dateRange = travelItem.date.split(" 至 ")
+                // 兼容中英文日期分隔符
+                val dateRange = if (travelItem.date.contains(" to ")) {
+                    travelItem.date.split(" to ")
+                } else {
+                    travelItem.date.split(" 至 ")
+                }
+                
                 if (dateRange.size == 2) {
                     try {
                         selectedTravelStartDate = dateFormat.parse(dateRange[0])
@@ -145,7 +151,7 @@ class NewDiaryActivity : AppCompatActivity() {
                                     (selectedTravelEndDate != null && currentDiaryDate.after(selectedTravelEndDate))) {
                                     selectedDate = dateRange[0]
                                     btnSelectDate.text = selectedDate
-                                    Toast.makeText(this@NewDiaryActivity, "日记日期已重置为旅行开始日期", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@NewDiaryActivity, R.string.diary_date_reset, Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } else {
@@ -200,7 +206,7 @@ class NewDiaryActivity : AppCompatActivity() {
         btnAddImage.setOnClickListener {
             // 检查是否已达到最大图片数量
             if (imageUris.size >= MAX_IMAGES) {
-                Toast.makeText(this, "最多只能添加9张图片", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_max_images, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -309,7 +315,7 @@ class NewDiaryActivity : AppCompatActivity() {
                 openImagePicker()
             } else {
                 // 权限拒绝，显示提示
-                Toast.makeText(this, "需要存储权限才能选择图片", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.permission_storage_images, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -342,11 +348,11 @@ class NewDiaryActivity : AppCompatActivity() {
                     
                     // 更新图片预览
                     updateImagesPreview()
-                    Toast.makeText(this, "图片添加成功", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.image_added, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this, "图片处理失败，请重试", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_image_process, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -480,7 +486,7 @@ class NewDiaryActivity : AppCompatActivity() {
             )
             deleteLayoutParams.gravity = android.view.Gravity.CENTER_VERTICAL
             deleteButton.layoutParams = deleteLayoutParams
-            deleteButton.text = "删除"
+            deleteButton.text = getString(R.string.delete)
             deleteButton.setBackgroundTintList(resources.getColorStateList(R.color.primary, theme))
             deleteButton.setTextColor(resources.getColor(android.R.color.white, theme))
             deleteButton.textSize = 12f
@@ -507,7 +513,7 @@ class NewDiaryActivity : AppCompatActivity() {
             imageUris.removeAt(index)
             imageFilePaths.removeAt(index)
             updateImagesPreview()
-            Toast.makeText(this, "图片已删除", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.image_deleted, Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -522,27 +528,27 @@ class NewDiaryActivity : AppCompatActivity() {
         
         // 验证表单
         if (title.isEmpty()) {
-            Toast.makeText(this, "请输入日记名称", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_diary_title, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (selectedTravelId.isEmpty()) {
-            Toast.makeText(this, "请选择所属旅行", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_trip, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (selectedDate.isEmpty()) {
-            Toast.makeText(this, "请选择日记日期", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_diary_date, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (location.isEmpty()) {
-            Toast.makeText(this, "请输入地点", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_location, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (content.isEmpty()) {
-            Toast.makeText(this, "请输入日记内容", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_diary_content, Toast.LENGTH_SHORT).show()
             return
         }
         
@@ -583,10 +589,10 @@ class NewDiaryActivity : AppCompatActivity() {
         val saveSuccess = FileUtils.saveDiaryData(this, jsonString)
         
         if (saveSuccess) {
-            Toast.makeText(this, "日记保存成功", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.diary_save_success, Toast.LENGTH_SHORT).show()
             finish() // 保存成功后返回
         } else {
-            Toast.makeText(this, "日记保存失败，请重试", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_diary_save_failed, Toast.LENGTH_SHORT).show()
         }
     }
 }

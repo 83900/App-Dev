@@ -91,12 +91,12 @@ class RegisterActivity : AppCompatActivity() {
             
             // 验证输入
             if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "用户名和密码不能为空", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_empty_username_password, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
             if (password != confirmPassword) {
-                Toast.makeText(this, "两次输入的密码不一致", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_password_mismatch, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -166,7 +166,7 @@ class RegisterActivity : AppCompatActivity() {
                 openImagePicker()
             } else {
                 // 权限拒绝，显示提示
-                Toast.makeText(this, "需要存储权限才能选择头像", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.permission_storage_avatar, Toast.LENGTH_SHORT).show()
                 
                 // 只有当用户至少拒绝过一次权限后，shouldShowRequestPermissionRationale才会准确反映
                 // 这里简化处理，不直接跳转到设置页面，避免错误引导
@@ -198,11 +198,11 @@ class RegisterActivity : AppCompatActivity() {
                 if (avatarFilePath.isNotEmpty()) {
                     // 显示图片
                     ivAvatar.setImageURI(selectedUri)
-                    Toast.makeText(this, "头像选择成功", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.avatar_selected, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this, "头像处理失败，请重试", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_avatar_process, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -313,7 +313,7 @@ class RegisterActivity : AppCompatActivity() {
         
         // 检查用户名是否已存在
         if (allUsers.any { it.username == username }) {
-            Toast.makeText(this, "用户名已存在", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_username_exists, Toast.LENGTH_SHORT).show()
             return
         }
         
@@ -334,14 +334,14 @@ class RegisterActivity : AppCompatActivity() {
         val saveSuccess = FileUtils.saveUserData(this, jsonString)
         
         if (saveSuccess) {
-            Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show()
             
             // 注册成功后跳转到登录页面
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         } else {
-            Toast.makeText(this, "注册失败，请重试", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_register_failed, Toast.LENGTH_SHORT).show()
         }
     }
 }

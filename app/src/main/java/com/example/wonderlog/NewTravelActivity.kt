@@ -124,8 +124,8 @@ class NewTravelActivity : AppCompatActivity() {
                     val end = dateFormat.parse(endDate)
                     if (start != null && end != null && end.before(start)) {
                         endDate = ""
-                        btnSelectEndDate.text = "请选择结束日期"
-                        Toast.makeText(this, "结束日期不能早于开始日期，已清空结束日期", Toast.LENGTH_SHORT).show()
+                        btnSelectEndDate.text = getString(R.string.select_end_date)
+                        Toast.makeText(this, R.string.error_end_date_early_cleared, Toast.LENGTH_SHORT).show()
                     }
                 }
             },
@@ -142,7 +142,7 @@ class NewTravelActivity : AppCompatActivity() {
     private fun showEndDatePicker() {
         // 如果没有选择开始日期，提示用户先选择开始日期
         if (startDate.isEmpty()) {
-            Toast.makeText(this, "请先选择开始日期", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_end_date_first, Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -201,7 +201,7 @@ class NewTravelActivity : AppCompatActivity() {
                 1f
             )
             setBackgroundResource(R.drawable.rounded_background)
-            hint = "请输入城市名称"
+            hint = getString(R.string.hint_city_name)
             setPadding(padding, 0, padding, 0) // 只设置左右padding，上下由高度控制
             setTextColor(resources.getColor(R.color.on_surface))
             textSize = 16f
@@ -256,7 +256,7 @@ class NewTravelActivity : AppCompatActivity() {
     private fun removeCity(index: Int) {
         // 至少保留一个城市
         if (cityCount <= 1) {
-            Toast.makeText(this, "至少需要一个城市", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_at_least_one_city, Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -291,14 +291,14 @@ class NewTravelActivity : AppCompatActivity() {
 
         // 验证城市列表
         if (cities.isEmpty()) {
-            Toast.makeText(this, "请至少输入一个城市", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_enter_city_name, Toast.LENGTH_SHORT).show()
             return
         }
 
         // 获取当前登录用户ID
         val currentUserId = SharedPreferencesUtils.getCurrentUserId(this) ?: ""
         if (currentUserId.isEmpty()) {
-            Toast.makeText(this, "用户未登录", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_user_not_logged_in, Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -308,7 +308,7 @@ class NewTravelActivity : AppCompatActivity() {
             userId = currentUserId,
             title = title,
             locations = cities,
-            date = "$startDate 至 $endDate",
+            date = "$startDate to $endDate",
             budget = budget
         )
 
@@ -324,17 +324,17 @@ class NewTravelActivity : AppCompatActivity() {
      */
     private fun validateForm(title: String): Boolean {
         if (title.isEmpty()) {
-            Toast.makeText(this, "请输入旅行名称", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_trip_name, Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (startDate.isEmpty()) {
-            Toast.makeText(this, "请选择开始日期", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.select_start_date, Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (endDate.isEmpty()) {
-            Toast.makeText(this, "请选择结束日期", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.select_end_date, Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -343,11 +343,11 @@ class NewTravelActivity : AppCompatActivity() {
             val start = dateFormat.parse(startDate)
             val end = dateFormat.parse(endDate)
             if (start != null && end != null && end.before(start)) {
-                Toast.makeText(this, "结束日期不能早于开始日期", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_end_date_early, Toast.LENGTH_SHORT).show()
                 return false
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "日期格式错误", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_date_format, Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -372,9 +372,9 @@ class NewTravelActivity : AppCompatActivity() {
         val saveSuccess = FileUtils.saveTravelData(this, updatedJson)
 
         if (saveSuccess) {
-            Toast.makeText(this, "旅行创建成功", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.trip_create_success, Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "旅行创建失败", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_trip_create_failed, Toast.LENGTH_SHORT).show()
         }
     }
 }

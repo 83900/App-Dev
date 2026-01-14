@@ -131,7 +131,12 @@ class ModifyDiaryActivity : AppCompatActivity() {
                 
                 // 解析所选旅行的开始日期和结束日期
                 val travelItem = travelList[position]
-                val dateRange = travelItem.date.split(" 至 ")
+                val dateRange = if (travelItem.date.contains(" to ")) {
+                    travelItem.date.split(" to ")
+                } else {
+                    travelItem.date.split(" 至 ")
+                }
+                
                 if (dateRange.size == 2) {
                     try {
                         selectedTravelStartDate = dateFormat.parse(dateRange[0])
@@ -215,7 +220,7 @@ class ModifyDiaryActivity : AppCompatActivity() {
         btnAddImage.setOnClickListener {
             // 检查是否已达到最大图片数量
             if (imageUris.size >= MAX_IMAGES) {
-                Toast.makeText(this, "最多只能添加9张图片", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_max_images, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -324,7 +329,7 @@ class ModifyDiaryActivity : AppCompatActivity() {
                 openImagePicker()
             } else {
                 // 权限拒绝，显示提示
-                Toast.makeText(this, "需要存储权限才能选择图片", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.permission_storage_images, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -357,11 +362,11 @@ class ModifyDiaryActivity : AppCompatActivity() {
                     
                     // 更新图片预览
                     updateImagesPreview()
-                    Toast.makeText(this, "图片添加成功", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.image_added, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this, "图片处理失败，请重试", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_image_process, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -495,7 +500,7 @@ class ModifyDiaryActivity : AppCompatActivity() {
             )
             deleteLayoutParams.gravity = android.view.Gravity.CENTER_VERTICAL
             deleteButton.layoutParams = deleteLayoutParams
-            deleteButton.text = "删除"
+            deleteButton.text = getString(R.string.delete)
             deleteButton.setBackgroundTintList(resources.getColorStateList(R.color.primary, theme))
             deleteButton.setTextColor(resources.getColor(android.R.color.white, theme))
             deleteButton.textSize = 12f
@@ -522,7 +527,7 @@ class ModifyDiaryActivity : AppCompatActivity() {
             imageUris.removeAt(index)
             imageFilePaths.removeAt(index)
             updateImagesPreview()
-            Toast.makeText(this, "图片已删除", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.image_deleted, Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -537,27 +542,27 @@ class ModifyDiaryActivity : AppCompatActivity() {
         
         // 验证表单
         if (title.isEmpty()) {
-            Toast.makeText(this, "请输入日记名称", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_diary_title, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (selectedTravelId.isEmpty()) {
-            Toast.makeText(this, "请选择所属旅行", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_trip, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (selectedDate.isEmpty()) {
-            Toast.makeText(this, "请选择日记日期", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_select_diary_date, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (location.isEmpty()) {
-            Toast.makeText(this, "请输入地点", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_location, Toast.LENGTH_SHORT).show()
             return
         }
         
         if (content.isEmpty()) {
-            Toast.makeText(this, "请输入日记内容", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.hint_diary_content, Toast.LENGTH_SHORT).show()
             return
         }
         
@@ -597,10 +602,10 @@ class ModifyDiaryActivity : AppCompatActivity() {
         val saveSuccess = FileUtils.saveDiaryData(this, updatedDiaryJson)
         
         if (saveSuccess) {
-            Toast.makeText(this, "日记修改成功", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.diary_modify_success, Toast.LENGTH_SHORT).show()
             finish()
         } else {
-            Toast.makeText(this, "日记修改失败，请重试", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_diary_modify_failed, Toast.LENGTH_SHORT).show()
         }
     }
 }

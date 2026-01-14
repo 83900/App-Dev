@@ -35,7 +35,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="日记详情"
+                android:text="@string/diary_details"
                 android:textColor="@color/on_surface"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -81,7 +81,7 @@
                     android:id="@+id/tv_diary_detail_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="日记标题"
+                    android:text="@string/diary_title"
                     android:textColor="@color/on_surface"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -91,7 +91,7 @@
                     android:id="@+id/tv_diary_detail_travel_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="旅行名称"
+                    android:text="@string/trip_name"
                     android:textColor="@color/primary"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -109,7 +109,7 @@
                         android:id="@+id/tv_diary_detail_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2024年1月16日"
+                        android:text="@string/diary_date"
                         android:textColor="#80000000"
                         android:textSize="14sp" />
 
@@ -124,7 +124,7 @@
                         android:id="@+id/tv_diary_detail_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="东京塔, 东京"
+                        android:text="@string/location"
                         android:textColor="#80000000"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -141,7 +141,7 @@
                     android:id="@+id/tv_diary_detail_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="日记内容..."
+                    android:text="@string/diary_content"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
                     android:lineSpacingExtra="4dp" />
@@ -158,7 +158,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日记图片"
+                android:text="@string/diary_images"
                 android:textColor="@color/on_surface"
                 android:textSize="18sp"
                 android:textStyle="bold"

@@ -65,7 +65,7 @@ object LocationService {
      */
     fun formatLocation(location: AMapLocation): String {
         return if (location.poiName.isNullOrEmpty()) {
-            location.address ?: "未知位置"
+            location.address ?: "Unknown Location" // 这里由于是工具类，直接返回英文，或者可以传递Context来获取资源
         } else {
             "${location.poiName} (${location.address})"
         }

@@ -5,31 +5,31 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@android:drawable/ic_dialog_map"
-        android:title="首页"
+        android:title="@string/nav_home"
         android:orderInCategory="1" />
 
     <item
         android:id="@+id/nav_diary"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="日记"
+        android:title="@string/nav_diary"
         android:orderInCategory="2" />
 
     <item
         android:id="@+id/nav_map"
         android:icon="@android:drawable/ic_menu_mapmode"
-        android:title="地图"
+        android:title="@string/nav_map"
         android:orderInCategory="3" />
 
     <item
         android:id="@+id/nav_expense"
         android:icon="@android:drawable/ic_menu_report_image"
-        android:title="费用"
+        android:title="@string/nav_expense"
         android:orderInCategory="4" />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="我的"
+        android:title="@string/nav_profile"
         android:orderInCategory="5" />
 
 </menu>

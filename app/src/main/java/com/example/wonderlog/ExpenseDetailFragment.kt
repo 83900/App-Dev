@@ -123,69 +123,52 @@ class ExpenseDetailFragment : Fragment() {
      * 显示删除确认对话框
      */
     private fun showDeleteConfirmationDialog() {
-        val builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setTitle("确认删除")
-            .setMessage("您确定要删除本次消费记录吗？")
-            .setPositiveButton("确认") {
-                dialog, which -> deleteExpense()
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle(R.string.delete_expense)
+            .setMessage(R.string.confirm_delete_expense)
+            .setPositiveButton(R.string.confirm) { _, _ ->
+                deleteExpense()
             }
-            .setNegativeButton("取消") {
-                dialog, which -> dialog.dismiss()
-            }
-            .create()
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
-    
+
     /**
      * 删除费用记录
      */
     private fun deleteExpense() {
-        // 读取现有费用数据
+        // 读取费用数据
         val expenseJson = FileUtils.readExpenseData(requireContext())
         val expenseList = expenseJson?.let {
             JsonUtils.jsonStringToExpenseItemList(it).toMutableList()
         } ?: mutableListOf()
-        
-        // 删除指定的费用项
-        expenseList.removeAll { it.id == expenseItem.id }
-        
-        // 保存更新后的费用数据
-        val updatedJson = JsonUtils.expenseItemListToJsonString(expenseList)
-        val saveSuccess = FileUtils.saveExpenseData(requireContext(), updatedJson)
-        
-        if (saveSuccess) {
-            // 显示删除成功提示
-            android.widget.Toast.makeText(requireContext(), "费用记录已删除", android.widget.Toast.LENGTH_SHORT).show()
-            
-            // 清除返回栈并返回到费用首页
-            val mainActivity = requireActivity() as MainActivity
-            
-            // 清除所有Fragment回栈
-            mainActivity.supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            
-            // 切换到费用Fragment
-            mainActivity.replaceFragment(ExpenseFragment())
-            
-            // 更新底部导航栏选中状态
-            mainActivity.findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation).selectedItemId = R.id.nav_expense
+
+        // 移除当前费用
+        val removed = expenseList.removeAll { it.id == expenseItem.id }
+
+        if (removed) {
+            // 保存更新后的数据
+            val updatedJson = JsonUtils.expenseItemListToJsonString(expenseList)
+            FileUtils.saveExpenseData(requireContext(), updatedJson)
+
+            // 提示并返回
+            android.widget.Toast.makeText(requireContext(), R.string.expense_deleted, android.widget.Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
         } else {
-            // 显示删除失败提示
-            android.widget.Toast.makeText(requireContext(), "费用记录删除失败", android.widget.Toast.LENGTH_SHORT).show()
+            android.widget.Toast.makeText(requireContext(), R.string.error_delete_expense, android.widget.Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     /**
      * 根据旅行ID获取旅行名称
      */
     private fun getTravelNameById(travelId: String): String {
-        // 从文件中读取所有旅行数据
-        val jsonString = FileUtils.readTravelData(requireContext())
-        jsonString?.let {
-            val travelList = JsonUtils.jsonStringToTravelItemList(it)
-            // 根据ID查找旅行项
-            val travelItem = travelList.find { it.id == travelId }
-            return travelItem?.title ?: "未知旅行"
-        }
-        return "未知旅行"
+        // 读取旅行数据
+        val travelJson = FileUtils.readTravelData(requireContext())
+        val travelList = travelJson?.let {
+            JsonUtils.jsonStringToTravelItemList(it)
+        } ?: emptyList()
+
+        return travelList.find { it.id == travelId }?.title ?: getString(R.string.unknown_trip)
     }
 }

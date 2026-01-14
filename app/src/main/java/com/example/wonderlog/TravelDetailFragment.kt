@@ -122,12 +122,12 @@ class TravelDetailFragment : Fragment() {
      */
     private fun showDeleteConfirmationDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("删除旅行记录")
-            .setMessage("您确定要删除本次旅行记录吗（同时会删除与本次旅行相关的日记和费用记录哦）？")
-            .setNegativeButton("取消") { dialog, _ ->
+            .setTitle(R.string.delete_trip)
+            .setMessage(R.string.confirm_delete_trip)
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton("确认") { dialog, _ ->
+            .setPositiveButton(R.string.confirm) { dialog, _ ->
                 deleteTravelRecord()
                 dialog.dismiss()
             }
@@ -166,7 +166,7 @@ class TravelDetailFragment : Fragment() {
         FileUtils.saveExpenseData(requireContext(), updatedExpenseJson)
 
         // 4. 显示删除成功提示
-        Toast.makeText(requireContext(), "旅行记录已删除", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.trip_deleted, Toast.LENGTH_SHORT).show()
         
         // 5. 返回首页
         requireActivity().supportFragmentManager.popBackStack(null, 0)

@@ -16,7 +16,7 @@
         android:tint="@android:color/white"
         android:background="@android:color/transparent"
         android:padding="12dp"
-        android:contentDescription="返回" />
+        android:contentDescription="@string/back" />
 
     <!-- ViewPager用于显示图片 -->
     <androidx.viewpager2.widget.ViewPager2
