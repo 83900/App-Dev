@@ -171,12 +171,12 @@ class DiaryDetailFragment : Fragment() {
      */
     private fun showDeleteConfirmationDialog() {
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("删除日记")
-            .setMessage("您确定要删除这篇日记吗？")
-            .setNegativeButton("取消") { dialog, _ ->
+            .setTitle(R.string.delete_diary)
+            .setMessage(R.string.confirm_delete_diary)
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton("确认") { dialog, _ ->
+            .setPositiveButton(R.string.confirm) { dialog, _ ->
                 deleteDiary()
                 dialog.dismiss()
             }
@@ -201,7 +201,7 @@ class DiaryDetailFragment : Fragment() {
         FileUtils.saveDiaryData(requireContext(), updatedDiaryJson)
         
         // 4. 显示删除成功提示
-        android.widget.Toast.makeText(requireContext(), "日记已删除", android.widget.Toast.LENGTH_SHORT).show()
+        android.widget.Toast.makeText(requireContext(), R.string.diary_deleted, android.widget.Toast.LENGTH_SHORT).show()
         
         // 5. 返回到日记首页（只弹出当前Fragment，返回到上一个Fragment）
         requireActivity().supportFragmentManager.popBackStack()
@@ -217,8 +217,8 @@ class DiaryDetailFragment : Fragment() {
             val travelList = JsonUtils.jsonStringToTravelItemList(it)
             // 根据ID查找旅行项
             val travelItem = travelList.find { it.id == travelId }
-            return travelItem?.title ?: "未知旅行"
+            return travelItem?.title ?: getString(R.string.unknown_trip)
         }
-        return "未知旅行"
+        return getString(R.string.unknown_trip)
     }
 }

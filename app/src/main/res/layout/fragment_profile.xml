@@ -52,7 +52,7 @@
                     android:id="@+id/tv_user_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="旅行者"
+                    android:text="@string/traveler"
                     android:textColor="@android:color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -95,7 +95,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="旅行次数"
+                            android:text="@string/trips"
                             android:textColor="#CCFFFFFF"
                             android:textSize="12sp" />
 
@@ -122,7 +122,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="访问城市"
+                            android:text="@string/cities"
                             android:textColor="#CCFFFFFF"
                             android:textSize="12sp" />
 
@@ -149,7 +149,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="日记数量"
+                            android:text="@string/diaries"
                             android:textColor="#CCFFFFFF"
                             android:textSize="12sp" />
 
@@ -204,7 +204,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="修改账户信息"
+                            android:text="@string/edit_profile"
                             android:textColor="@color/on_surface"
                             android:textSize="16sp" />
 
@@ -212,7 +212,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="修改头像和昵称"
+                            android:text="@string/change_avatar_nickname"
                             android:textColor="#99121212"
                             android:textSize="12sp" />
 
@@ -255,7 +255,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="退出登录"
+                            android:text="@string/logout"
                             android:textColor="@android:color/holo_red_dark"
                             android:textSize="16sp" />
 
@@ -263,7 +263,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="安全退出当前账户"
+                            android:text="@string/sign_out_desc"
                             android:textColor="#99121212"
                             android:textSize="12sp" />
 

@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="记录你的精彩旅程"
+            android:text="@string/slogan"
             android:textColor="@color/on_surface_variant"
             android:textSize="16sp" />
     </LinearLayout>
@@ -61,7 +61,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="账号"
+            android:text="@string/username"
             android:textColor="@color/on_surface"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="请输入账号"
+            android:hint="@string/hint_username"
             app:boxBackgroundColor="#F8F9FA"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="密码"
+            android:text="@string/password"
             android:textColor="@color/on_surface"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -101,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="请输入密码"
+            android:hint="@string/hint_password"
             app:boxBackgroundColor="#F8F9FA"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -126,7 +126,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="32dp"
             android:backgroundTint="@color/primary"
-            android:text="登录"
+            android:text="@string/login"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -142,7 +142,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="还没有账号？"
+                android:text="@string/no_account"
                 android:textColor="@color/on_surface_variant"
                 android:textSize="14sp" />
 
@@ -151,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="立即注册"
+                android:text="@string/register_now"
                 android:textColor="@color/primary"
                 android:textSize="14sp"
                 android:textStyle="bold" />

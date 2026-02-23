@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="创建账号"
+            android:text="@string/create_account"
             android:textColor="@color/on_surface"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="开始记录你的精彩旅程"
+            android:text="@string/start_journey"
             android:textColor="@color/on_surface_variant"
             android:textSize="16sp" />
 
@@ -52,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="头像"
+                android:text="@string/avatar"
                 android:textColor="@color/on_surface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -71,7 +71,7 @@
                     android:background="@drawable/rounded_background"
                     android:src="@drawable/login_logo"
                     android:scaleType="centerCrop"
-                    android:contentDescription="用户头像" />
+                    android:contentDescription="@string/user_avatar" />
 
                 <Button
                     android:id="@+id/btn_select_avatar"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:backgroundTint="@color/primary"
-                    android:text="选择头像"
+                    android:text="@string/select_avatar"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="账号"
+                android:text="@string/username"
                 android:textColor="@color/on_surface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="请输入账号"
+                android:hint="@string/hint_username"
                 app:boxBackgroundColor="#F8F9FA"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="用户昵称"
+                android:text="@string/nickname"
                 android:textColor="@color/on_surface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="请输入用户昵称"
+                android:hint="@string/hint_nickname"
                 app:boxBackgroundColor="#F8F9FA"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -151,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="密码"
+                android:text="@string/password"
                 android:textColor="@color/on_surface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="请输入密码"
+                android:hint="@string/hint_password"
                 app:boxBackgroundColor="#F8F9FA"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -183,7 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="确认密码"
+                android:text="@string/confirm_password"
                 android:textColor="@color/on_surface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -192,7 +192,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="请再次输入密码"
+                android:hint="@string/hint_confirm_password"
                 app:boxBackgroundColor="#F8F9FA"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -217,7 +217,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
                 android:backgroundTint="@color/primary"
-                android:text="注册"
+                android:text="@string/register"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -233,7 +233,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="已有账号？"
+                    android:text="@string/have_account"
                     android:textColor="@color/on_surface_variant"
                     android:textSize="14sp" />
 
@@ -242,7 +242,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="立即登录"
+                    android:text="@string/login_now"
                     android:textColor="@color/primary"
                     android:textSize="14sp"
                     android:textStyle="bold" />

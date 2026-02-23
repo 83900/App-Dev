@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="修改账户信息"
+        android:text="@string/edit_profile"
         android:textColor="@color/on_surface"
         android:textSize="28sp"
         android:textStyle="bold" />
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="头像"
+            android:text="@string/avatar"
             android:textColor="@color/on_surface"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -62,7 +62,7 @@
                 android:layout_height="80dp"
                 android:background="@drawable/rounded_background"
                 android:scaleType="centerCrop"
-                android:contentDescription="用户头像" />
+                android:contentDescription="@string/user_avatar" />
 
             <Button
                 android:id="@+id/btn_select_avatar"
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:backgroundTint="@color/primary"
-                android:text="选择头像"
+                android:text="@string/select_avatar"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="用户昵称"
+            android:text="@string/nickname"
             android:textColor="@color/on_surface"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="请输入用户昵称"
+            android:hint="@string/hint_nickname"
             app:boxBackgroundColor="#F8F9FA"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -113,7 +113,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="32dp"
             android:backgroundTint="@color/primary"
-            android:text="保存修改"
+            android:text="@string/save_changes"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />

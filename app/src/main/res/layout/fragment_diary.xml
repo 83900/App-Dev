@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="旅行日记"
+            android:text="@string/travel_diaries"
             android:textColor="@color/on_surface"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
             android:src="@android:drawable/ic_menu_add"
             android:tint="@color/primary"
             android:background="@null"
-            android:contentDescription="添加日记" />
+            android:contentDescription="@string/add_diary_desc" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="旅行筛选："
+            android:text="@string/filter_by_trip"
             android:textColor="@color/on_surface"
             android:textSize="14sp" />
 

@@ -325,7 +325,7 @@ class ModifyProfileActivity : AppCompatActivity() {
         
         // 验证输入
         if (nickname.isEmpty()) {
-            Toast.makeText(this, "昵称不能为空", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_empty_nickname, Toast.LENGTH_SHORT).show()
             return
         }
         
@@ -353,11 +353,11 @@ class ModifyProfileActivity : AppCompatActivity() {
             val saveSuccess = FileUtils.saveUserData(this, jsonString)
             
             if (saveSuccess) {
-                Toast.makeText(this, "修改成功", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.profile_update_success, Toast.LENGTH_SHORT).show()
                 // 返回上一页
                 finish()
             } else {
-                Toast.makeText(this, "修改失败，请重试", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_profile_update_failed, Toast.LENGTH_SHORT).show()
             }
         }
     }

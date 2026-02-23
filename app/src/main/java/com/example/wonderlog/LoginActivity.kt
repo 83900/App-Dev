@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
             
             // 验证输入
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "用户名和密码不能为空", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.error_empty_username_password, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             
@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
         if (matchedUser != null) {
             // 登录成功
             SharedPreferencesUtils.saveLoginStatus(this, true, matchedUser.id, matchedUser.username)
-            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show()
             
             // 跳转到主页面
             val intent = Intent(this, MainActivity::class.java)
@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         } else {
             // 登录失败
-            Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.error_invalid_credentials, Toast.LENGTH_SHORT).show()
         }
     }
 }

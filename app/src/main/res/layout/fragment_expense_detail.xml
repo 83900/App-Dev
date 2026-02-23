@@ -35,7 +35,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="费用详情"
+                android:text="@string/expense_details_title"
                 android:textColor="@color/on_surface"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -81,7 +81,7 @@
                     android:id="@+id/tv_expense_detail_travel_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="旅行名称"
+                    android:text="@string/trip_name"
                     android:textColor="@color/primary"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -132,7 +132,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="费用标题"
+                        android:text="@string/expense_title_label"
                         android:textColor="#80000000"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />
@@ -156,7 +156,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="费用类别"
+                        android:text="@string/expense_category_label"
                         android:textColor="#80000000"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />
@@ -179,7 +179,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="消费日期"
+                        android:text="@string/expense_date_label"
                         android:textColor="#80000000"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />

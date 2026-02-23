@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
-            android:text="返回"
+            android:text="@string/back"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="新建日记"
+            android:text="@string/new_diary"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
-            android:text="确认"
+            android:text="@string/confirm"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
     </LinearLayout>
@@ -65,7 +65,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="日记名称"
+                    android:text="@string/diary_title"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp" />
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_background"
-                    android:hint="请输入日记名称"
+                    android:hint="@string/hint_diary_title"
                     android:padding="12dp"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp" />
@@ -91,7 +91,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="所属旅行"
+                    android:text="@string/related_trip"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp" />
@@ -116,7 +116,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="日记日期"
+                    android:text="@string/diary_date"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp" />
@@ -130,7 +130,7 @@
                     app:backgroundTint="#b3d1fc"
                     app:cornerRadius="24dp"
                     android:padding="12dp"
-                    android:text="请选择日记日期"
+                    android:text="@string/select_diary_date"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -145,7 +145,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="地点"
+                    android:text="@string/location"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp" />
@@ -155,7 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_background"
-                    android:hint="请输入地点"
+                    android:hint="@string/hint_location"
                     android:padding="12dp"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp" />
@@ -171,7 +171,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="日记内容"
+                    android:text="@string/diary_content"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp" />
@@ -181,7 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:background="@null"
-                    android:hint="请输入日记内容"
+                    android:hint="@string/hint_diary_content"
                     android:padding="12dp"
                     android:textColor="@color/on_surface"
                     android:textSize="16sp"
@@ -208,7 +208,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="日记图片（最多9张）"
+                        android:text="@string/diary_images_max"
                         android:textColor="@color/on_surface"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp" />
@@ -218,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/primary"
-                        android:text="添加图片"
+                        android:text="@string/add_image"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />

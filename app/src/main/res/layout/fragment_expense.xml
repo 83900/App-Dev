@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="费用管理"
+            android:text="@string/expense_management"
             android:textColor="@color/on_surface"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:layout_marginLeft="16dp"
-            android:contentDescription="添加费用"
+            android:contentDescription="@string/add_expense_desc"
             android:src="@android:drawable/ic_menu_add"
             android:tint="@color/primary" />
 
@@ -55,7 +55,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="旅行筛选："
+            android:text="@string/filter_by_trip"
             android:textColor="@color/on_surface"
             android:textSize="14sp" />
 
@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="总费用"
+                android:text="@string/total_expense"
                 android:textColor="#E0FFFFFF"
                 android:textSize="16sp" />
 
@@ -118,7 +118,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="预算"
+                        android:text="@string/budget"
                         android:textColor="#CCFFFFFF"
                         android:textSize="12sp" />
 
@@ -144,7 +144,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="剩余"
+                        android:text="@string/remaining"
                         android:textColor="#CCFFFFFF"
                         android:textSize="12sp" />
 
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="费用明细"
+        android:text="@string/expense_details"
         android:textColor="@color/on_surface"
         android:textSize="18sp"
         android:textStyle="bold" />

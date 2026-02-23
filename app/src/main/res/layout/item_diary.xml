@@ -20,11 +20,10 @@
             android:id="@+id/tv_diary_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="东京塔的夜景"
             android:textColor="@color/on_surface"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="东京塔的夜景" />
+            tools:text="Diary Title" />
 
         <!-- 日记内容摘要 -->
         <TextView
@@ -35,10 +34,9 @@
             android:ellipsize="end"
             android:lineSpacingExtra="4dp"
             android:maxLines="2"
-            android:text="今天晚上去了东京塔，夜景真的太美了！整个东京都在脚下闪闪发光..."
             android:textColor="#CC121212"
             android:textSize="14sp"
-            tools:text="今天晚上去了东京塔，夜景真的太美了！整个东京都在脚下闪闪发光..." />
+            tools:text="Diary content summary..." />
 
         <!-- 位置和日期 -->
         <RelativeLayout
@@ -65,10 +63,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="东京塔, 东京"
                     android:textColor="#99121212"
                     android:textSize="12sp"
-                    tools:text="东京塔, 东京" />
+                    tools:text="Tokyo Tower, Tokyo" />
 
             </LinearLayout>
 
@@ -91,10 +88,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="2024年1月16日"
                     android:textColor="#99121212"
                     android:textSize="12sp"
-                    tools:text="2024年1月16日" />
+                    tools:text="Jan 16, 2024" />
 
             </LinearLayout>
 

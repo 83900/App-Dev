@@ -126,7 +126,7 @@ class DiaryFragment : Fragment() {
      */
     private fun initTravelFilterSpinner() {
         // 创建旅行名称列表，第一个选项为"全部旅行"
-        val travelNames = mutableListOf("全部旅行")
+        val travelNames = mutableListOf(getString(R.string.all_trips))
         // 添加所有旅行名称
         allTravelList.forEach { travelNames.add(it.title) }
         
